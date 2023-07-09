@@ -63,7 +63,7 @@ const getPlanes = () => {
 let clickedList: number[] = [];
 let timer: ReturnType<typeof setTimeout> | null = null;
 
-(async () => {
+const initial = async () => {
   await proxyStore.ready();
 
   const planes = getPlanes();
@@ -87,7 +87,11 @@ let timer: ReturnType<typeof setTimeout> | null = null;
 
       timer = setTimeout(() => {
         console.log('debounced', clickedList);
-        proxyStore.dispatch(updateClickedList([...clickedList]));
+        proxyStore.dispatch(
+          updateClickedList(
+            Array.from(new Set(clickedList)).sort((a, b) => a - b)
+          )
+        );
         clickedList = [];
       }, 500);
     };
@@ -96,4 +100,20 @@ let timer: ReturnType<typeof setTimeout> | null = null;
 
     $dom.addEventListener('click', handler);
   });
-})();
+};
+
+initial();
+
+const observer = new MutationObserver((mutations) => {
+  if (mutations.length > 0) {
+    setTimeout(() => {
+      initial();
+    }, 1500);
+  }
+});
+
+const $html = document.querySelector('html');
+
+if ($html instanceof HTMLHtmlElement) {
+  observer.observe($html, { childList: true, subtree: true });
+}
