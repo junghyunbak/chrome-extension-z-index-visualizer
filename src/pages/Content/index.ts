@@ -62,6 +62,7 @@ const getPlanes = () => {
 
 let clickedList: number[] = [];
 let timer: ReturnType<typeof setTimeout> | null = null;
+const handlers: Array<{ $dom: Element; handler: () => void }> = [];
 
 const initial = async () => {
   await proxyStore.ready();
@@ -70,12 +71,20 @@ const initial = async () => {
 
   await proxyStore.dispatch(updatePlanes(planes));
 
-  console.log('result', proxyStore.getState());
-
   /**
    * 각 요소에 click 이벤트 추가
    */
-  const handlers: Array<{ $dom: Element; handler: () => void }> = [];
+  while (handlers.length) {
+    const top = handlers.pop();
+
+    if (!top) {
+      return;
+    }
+
+    const { $dom, handler } = top;
+
+    $dom.removeEventListener('click', handler);
+  }
 
   planes.forEach(({ $dom }, i) => {
     const handler = () => {
@@ -86,7 +95,6 @@ const initial = async () => {
       clickedList.push(i);
 
       timer = setTimeout(() => {
-        console.log('debounced', clickedList);
         proxyStore.dispatch(
           updateClickedList(
             Array.from(new Set(clickedList)).sort((a, b) => a - b)
