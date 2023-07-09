@@ -3,7 +3,6 @@ import { color } from '../../../../constants';
 
 const defaultBgColor = color.bluePrintBg;
 const activeBgColor = '#bcbcbc66';
-const borderColor = '#ffffffab';
 
 const ratio = 75;
 
@@ -52,7 +51,7 @@ export const Line = styled.div<PlaneProps>`
 
   border-width: 0.5px;
   border-style: solid;
-  border-color: ${borderColor};
+  border-color: ${color.borderColor};
   border-radius: 5px;
   backdrop-filter: blur(10px);
 `;
