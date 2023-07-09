@@ -16,6 +16,8 @@ export const layout = css`
 
   cursor: pointer;
 
+  z-index: 3;
+
   svg {
     path {
       fill: #a2b8d1;
