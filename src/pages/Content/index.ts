@@ -1,7 +1,7 @@
 import { createStoreProxy } from '../../store';
 import type { Plane } from '../../types/Plane';
 import PortNames from '../../types/PortNames';
-import { updatePlanes } from '../../store/slices/content';
+import { updateClickedList, updatePlanes } from '../../store/slices/content';
 
 const proxyStore = createStoreProxy(PortNames.ContentPort);
 
@@ -60,6 +60,9 @@ const getPlanes = () => {
   return planes;
 };
 
+let clickedList: number[] = [];
+let timer: ReturnType<typeof setTimeout> | null = null;
+
 (async () => {
   await proxyStore.ready();
 
@@ -68,4 +71,29 @@ const getPlanes = () => {
   await proxyStore.dispatch(updatePlanes(planes));
 
   console.log('result', proxyStore.getState());
+
+  /**
+   * 각 요소에 click 이벤트 추가
+   */
+  const handlers: Array<{ $dom: Element; handler: () => void }> = [];
+
+  planes.forEach(({ $dom }, i) => {
+    const handler = () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+
+      clickedList.push(i);
+
+      timer = setTimeout(() => {
+        console.log('debounced', clickedList);
+        proxyStore.dispatch(updateClickedList([...clickedList]));
+        clickedList = [];
+      }, 500);
+    };
+
+    handlers.push({ $dom, handler });
+
+    $dom.addEventListener('click', handler);
+  });
 })();
