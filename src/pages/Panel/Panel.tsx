@@ -7,9 +7,13 @@ import { Global } from '@emotion/react';
 import * as S from './Panel.styles';
 import { FitButton } from './components/FitButton';
 
+const ZOOM_SPEED = 0.2;
+
 function Panel() {
   const layout = useRef<HTMLDivElement | null>(null);
   const drag = useRef<HTMLDivElement | null>(null);
+
+  const zoom = useRef<number>(1);
 
   const setPlaneToStartLoc = () => {
     const $drag = drag.current;
@@ -17,8 +21,37 @@ function Panel() {
     if ($drag instanceof HTMLDivElement) {
       $drag.style.top = '0px';
       $drag.style.left = '0px';
+
+      $drag.style.transform = 'scale(1)';
     }
   };
+
+  useEffect(() => {
+    const $layout = layout.current;
+    const $drag = drag.current;
+
+    if ($layout instanceof HTMLElement && $drag instanceof HTMLElement) {
+      $layout.addEventListener('wheel', (e) => {
+        console.log('wheel');
+
+        if (e.deltaY < 0) {
+          zoom.current += ZOOM_SPEED;
+
+          if (zoom.current > 1.5) {
+            zoom.current = 1.5;
+          }
+        } else {
+          zoom.current -= ZOOM_SPEED;
+
+          if (zoom.current < 0.5) {
+            zoom.current = 0.5;
+          }
+        }
+
+        $drag.style.transform = `scale(${zoom.current})`;
+      });
+    }
+  }, []);
 
   /**
    * 3차원 좌표평면 드래그 이벤트
