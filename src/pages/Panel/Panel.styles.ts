@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { color } from '../../constants';
 
 export const global = css`
   html,
@@ -17,7 +18,7 @@ export const global = css`
 `;
 
 export const layout = css`
-  color: #ffffff;
+  background-color: ${color.bluePrintBg};
 
   position: fixed;
   inset: 0;

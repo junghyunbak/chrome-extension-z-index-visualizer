@@ -24,6 +24,8 @@ export const Layout = styled.div<LayoutProps>`
   .${(props) => props.activeClassName} {
     background-color: ${activeBgColor};
   }
+
+  transform: skew(-30deg, 15deg);
 `;
 
 interface PlaneProps {
@@ -38,7 +40,7 @@ interface PlaneProps {
 
 export const Line = styled.div<PlaneProps>`
   position: absolute;
-  left: ${(props) => (props.y / props.maxHeight) * ratio}%;
+  left: ${(props) => (props.y / props.maxHeight) * ratio - props.depth * 2}%;
   bottom: ${(props) => (props.x / props.maxWidth) * ratio + props.depth * 3}%;
 
   width: ${(props) => (props.height / props.maxHeight) * ratio}%;
@@ -48,9 +50,9 @@ export const Line = styled.div<PlaneProps>`
 
   transition: background-color ease 0.2s;
 
-  border: 0.5px solid ${borderColor};
-  border-radius: 2px;
+  border-width: 0.5px;
+  border-style: solid;
+  border-color: ${borderColor};
+  border-radius: 5px;
   backdrop-filter: blur(10px);
-
-  transform: skewX(-30deg);
 `;
