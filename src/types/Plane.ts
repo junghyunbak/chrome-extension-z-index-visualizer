@@ -1,9 +1,16 @@
-export type Plane = {
-  dom: Element;
+type Position = {
   y: number;
   x: number;
-  height: number;
-  width: number;
-  maxWidth: number;
-  maxHeight: number;
 };
+
+type Size = {
+  width: number;
+  height: number;
+};
+
+export interface Plane {
+  $dom: Element;
+  depth: number;
+  pos: Position;
+  size: Size;
+}
