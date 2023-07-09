@@ -112,9 +112,16 @@ const initial = async () => {
 
 initial();
 
+let refreshTimer: ReturnType<typeof setTimeout> | null = null;
+
 const observer = new MutationObserver((mutations) => {
   if (mutations.length > 0) {
-    setTimeout(() => {
+    if (refreshTimer) {
+      clearTimeout(refreshTimer);
+    }
+
+    refreshTimer = setTimeout(() => {
+      console.log('inital');
       initial();
     }, 1500);
   }
