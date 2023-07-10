@@ -1,16 +1,12 @@
+import type { HandlerOfDom, Plane } from '../../types/Plane';
 import { createProxyStore } from '../../store';
-
 import PortNames from '../../types/PortNames';
-
 import { updateClickedList, updatePlanes } from '../../store/slices/content';
-
 import {
   makePlaneObjects,
   collectHandler,
   observerAllDomChange,
 } from '../../utils/dom';
-
-import type { HandlerOfDom, Plane } from '../../types/Plane';
 
 const proxyStore = createProxyStore(PortNames.ContentPort);
 
@@ -51,6 +47,9 @@ const initial = async () => {
   attachHandler(planes);
 };
 
+/**
+ * 진입점(entry)
+ */
 (async () => {
   await proxyStore.ready();
   await initial();
