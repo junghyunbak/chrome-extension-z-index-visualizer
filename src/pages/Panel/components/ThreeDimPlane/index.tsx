@@ -36,21 +36,27 @@ export function ThreeDimPlane() {
 
   return (
     <S.Layout activeClassName={activeClassName} ref={layout}>
-      {planes.map(({ pos: { y, x }, size: { height, width }, depth }, i) => {
-        return (
-          <S.Line
-            data-line={i}
-            key={i}
-            y={y}
-            x={x}
-            width={width}
-            height={height}
-            depth={depth}
-            maxWidth={maxWidth}
-            maxHeight={maxHeight}
-          />
-        );
-      })}
+      {planes.map(
+        ({ pos: { y, x }, size: { height, width }, depth, bgColor }, i) => {
+          return (
+            <S.Line
+              data-line={i}
+              key={i}
+              y={y}
+              x={x}
+              width={width}
+              height={height}
+              depth={depth}
+              maxWidth={maxWidth}
+              maxHeight={maxHeight}
+              style={{
+                backgroundColor:
+                  bgColor === 'rgba(0, 0, 0, 0)' ? 'white' : bgColor,
+              }}
+            />
+          );
+        }
+      )}
     </S.Layout>
   );
 }

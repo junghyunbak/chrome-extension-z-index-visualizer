@@ -13,4 +13,5 @@ export interface Plane {
   depth: number;
   pos: Position;
   size: Size;
+  bgColor: string;
 }

@@ -39,12 +39,15 @@ const getPlanes = () => {
   tmp.forEach((v) => {
     const { $dom } = v;
     const { y, x, height, width } = $dom.getBoundingClientRect();
+    const bgColor = window
+      .getComputedStyle($dom, null)
+      .getPropertyValue('background-color');
 
     if (height === 0) {
       return;
     }
 
-    planes.push({ ...v, pos: { y, x }, size: { height, width } });
+    planes.push({ ...v, pos: { y, x }, size: { height, width }, bgColor });
   });
 
   planes.sort((a, b) => {

@@ -1,9 +1,6 @@
 import styled from '@emotion/styled';
 import { color } from '../../../../constants';
 
-const defaultBgColor = color.bluePrintBg;
-const activeBgColor = '#bcbcbc66';
-
 const ratio = 75;
 
 interface LayoutProps {
@@ -21,7 +18,7 @@ export const Layout = styled.div<LayoutProps>`
   flex-direction: column-reverse;
 
   .${(props) => props.activeClassName} {
-    background-color: ${activeBgColor};
+    filter: brightness(0.8);
   }
 
   transform: skew(-30deg, 15deg);
@@ -45,13 +42,8 @@ export const Line = styled.div<PlaneProps>`
   width: ${(props) => (props.height / props.maxHeight) * ratio}%;
   height: ${(props) => (props.width / props.maxWidth) * ratio}%;
 
-  background-color: ${defaultBgColor};
-
   transition: background-color ease 0.2s;
 
-  border-width: 0.5px;
-  border-style: solid;
-  border-color: ${color.borderColor};
+  border: 1px solid ${color.borderColor};
   border-radius: 5px;
-  backdrop-filter: blur(10px);
 `;
