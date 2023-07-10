@@ -10,34 +10,42 @@ import {
 
 const proxyStore = createProxyStore(PortNames.ContentPort);
 
-let clickedList: number[] = [];
 const handlers: HandlerOfDom[] = [];
 
 const attachHandler = (planes: Plane[]) => {
   let timer: ReturnType<typeof setTimeout> | null = null;
+  let clickedList: number[] = [];
+
+  const createHandler = (index: number) => () => {
+    clickedList.push(index);
+
+    if (timer) {
+      clearTimeout(timer);
+    }
+
+    timer = setTimeout(() => {
+      proxyStore.dispatch(
+        updateClickedList(
+          Array.from(new Set(clickedList)).sort((a, b) => a - b)
+        )
+      );
+      clickedList = [];
+    }, 500);
+  };
 
   planes.forEach(({ $dom }, i) => {
-    const handler = () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-
-      clickedList.push(i);
-
-      timer = setTimeout(() => {
-        proxyStore.dispatch(
-          updateClickedList(
-            Array.from(new Set(clickedList)).sort((a, b) => a - b)
-          )
-        );
-        clickedList = [];
-      }, 500);
-    };
+    const handler = createHandler(i);
 
     handlers.push({ $dom, handler });
 
     $dom.addEventListener('click', handler);
   });
+
+  const windowHandler = createHandler(-1);
+
+  handlers.push({ $dom: window, handler: windowHandler });
+
+  window.addEventListener('click', windowHandler);
 };
 
 const initial = async () => {

@@ -23,38 +23,40 @@ export function ThreeDimPlane({
 
   useEffect(() => {
     clickedList.forEach((index, i, arr) => {
-      const $line = document.querySelector(`[data-line="${index}"]`);
+      if (index >= 0) {
+        const $line = document.querySelector(`[data-line="${index}"]`);
 
-      if (!($line instanceof HTMLDivElement)) {
-        return;
-      }
+        if (!($line instanceof HTMLDivElement)) {
+          return;
+        }
 
-      if (Array.from($line.classList).indexOf(activeClassName) !== -1) {
-        $line.classList.remove(activeClassName);
-      }
-
-      setTimeout(() => {
-        $line.classList.add(activeClassName);
-
-        setTimeout(() => {
+        if (Array.from($line.classList).indexOf(activeClassName) !== -1) {
           $line.classList.remove(activeClassName);
-        }, 2000);
-      }, 50 * (arr.length - i + 1));
-    });
-
-    if (clickedList.includes(0)) {
-      setTimeout(() => {
-        if (background.current) {
-          background.current.style.filter = 'brightness(0.8)';
         }
 
         setTimeout(() => {
+          $line.classList.add(activeClassName);
+
+          setTimeout(() => {
+            $line.classList.remove(activeClassName);
+          }, 2000);
+        }, 50 * (arr.length - i + 1));
+      }
+
+      if (index === -1) {
+        setTimeout(() => {
           if (background.current) {
-            background.current.style.filter = '';
+            background.current.style.filter = 'brightness(0.8)';
           }
-        }, 2000);
-      }, 50 * (clickedList.length - 0 + 1));
-    }
+
+          setTimeout(() => {
+            if (background.current) {
+              background.current.style.filter = '';
+            }
+          }, 2000);
+        }, 50 * (clickedList.length - 0 + 1));
+      }
+    });
   }, [clickedList]);
 
   return (

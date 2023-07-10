@@ -11,7 +11,7 @@ type Size = {
 };
 
 export interface Plane {
-  $dom: Element;
+  $dom: Element | Window;
   depth: number;
   pos: Position;
   size: Size;
@@ -21,6 +21,6 @@ export interface Plane {
 export type ElementWithDepth = Pick<Plane, '$dom' | 'depth'>;
 
 export type HandlerOfDom = {
-  $dom: Element;
+  $dom: Element | Window;
   handler: () => void;
 };
