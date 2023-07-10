@@ -1,4 +1,6 @@
 const ZOOM_SPEED = 0.1;
+const ZOOM_MAX = 1.8;
+const ZOOM_MIN = 0.2;
 
 export const wheelZoomInOut = (
   $parent: HTMLElement | null,
@@ -14,14 +16,14 @@ export const wheelZoomInOut = (
     if (e.deltaY < 0) {
       zoom += ZOOM_SPEED;
 
-      if (zoom > 1.5) {
-        zoom = 1.5;
+      if (zoom > ZOOM_MAX) {
+        zoom = ZOOM_MAX;
       }
     } else {
       zoom -= ZOOM_SPEED;
 
-      if (zoom < 0.5) {
-        zoom = 0.5;
+      if (zoom < ZOOM_MIN) {
+        zoom = ZOOM_MIN;
       }
     }
 
