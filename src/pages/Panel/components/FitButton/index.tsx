@@ -1,14 +1,23 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import * as S from './index.styles';
+import {
+  setTopLeftPosition,
+  setDefaultScale,
+} from '../../../../utils/controlDom';
 
 interface Props {
-  setPlaneToStartLoc: () => void;
+  $target: HTMLElement | null;
 }
 
-export function FitButton({ setPlaneToStartLoc }: Props) {
+export function FitButton({ $target }: Props) {
+  const handleFitButtonClick = () => {
+    setTopLeftPosition($target);
+    setDefaultScale($target);
+  };
+
   return (
-    <div css={S.layout} onClick={setPlaneToStartLoc}>
+    <div css={S.layout} onClick={handleFitButtonClick}>
       <svg
         aria-hidden="true"
         height="16"

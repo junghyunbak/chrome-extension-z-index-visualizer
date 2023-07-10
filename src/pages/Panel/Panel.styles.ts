@@ -30,9 +30,20 @@ export const dragWrapper = css`
   width: 100%;
   height: 100%;
 
+  transition: transform ease 0.3s;
+
   cursor: grab;
 
   &:active {
     cursor: grabbing;
   }
+`;
+
+export const errorModal = css`
+  position: fixed;
+  inset: 0;
+
+  background-color: black;
+
+  z-index: 9999;
 `;
