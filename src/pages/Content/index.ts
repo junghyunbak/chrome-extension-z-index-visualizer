@@ -42,6 +42,11 @@ const getPlanes = () => {
     const bgColor = window
       .getComputedStyle($dom, null)
       .getPropertyValue('background-color');
+    const tagName = $dom.tagName.toLowerCase();
+
+    if (tagName === 'span') {
+      return;
+    }
 
     if (height === 0) {
       return;
