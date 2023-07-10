@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import type { Plane } from '../../../../types/Plane';
 import { useAppSelector } from '../../../../hooks/useAppDispatch';
 import * as S from './index.styles';
 
@@ -11,8 +10,6 @@ export function ThreeDimPlane() {
   const clickedList = useAppSelector((state) => state.content.clickedList);
 
   useEffect(() => {
-    console.log('clicked list', clickedList);
-
     clickedList.forEach((index) => {
       const $line = document.querySelector(`[data-line="${index}"]`);
 
