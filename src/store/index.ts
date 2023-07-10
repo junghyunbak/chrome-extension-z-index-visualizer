@@ -5,7 +5,7 @@ import content from './slices/content';
 
 import type { State } from './State';
 
-export const createStoreProxy = (portName: string) => {
+export const createProxyStore = (portName: string) => {
   const store = new Store<State>({ portName });
 
   // Fix for unresolved bug in webext-redux: https://github.com/tshaddix/webext-redux/issues/286

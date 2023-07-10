@@ -3,10 +3,10 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import Panel from './Panel';
 
-import { createStoreProxy } from '../../store';
+import { createProxyStore } from '../../store';
 import PortNames from '../../types/PortNames';
 
-const proxyStore = createStoreProxy(PortNames.ContentPort);
+const proxyStore = createProxyStore(PortNames.ContentPort);
 
 proxyStore.ready().then(() => {
   const container = document.getElementById('app-container');

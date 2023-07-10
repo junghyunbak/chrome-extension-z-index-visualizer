@@ -1,9 +1,9 @@
-import { createStoreProxy } from '../../store';
+import { createProxyStore } from '../../store';
 import type { Plane } from '../../types/Plane';
 import PortNames from '../../types/PortNames';
 import { updateClickedList, updatePlanes } from '../../store/slices/content';
 
-const proxyStore = createStoreProxy(PortNames.ContentPort);
+const proxyStore = createProxyStore(PortNames.ContentPort);
 
 type Pick<T, K extends keyof T> = {
   [k in K]: T[k];
