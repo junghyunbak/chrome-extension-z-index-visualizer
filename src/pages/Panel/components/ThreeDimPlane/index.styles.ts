@@ -36,8 +36,8 @@ interface PlaneProps {
 
 export const Line = styled.div<PlaneProps>`
   position: absolute;
-  left: ${(props) => (props.y / props.maxHeight) * ratio - props.depth * 2}%;
-  bottom: ${(props) => (props.x / props.maxWidth) * ratio + props.depth * 3}%;
+  left: ${(props) => (props.y / props.maxHeight) * ratio - (props.depth + 2)}%;
+  bottom: ${(props) => (props.x / props.maxWidth) * ratio + (props.depth + 3)}%;
 
   width: ${(props) => (props.height / props.maxHeight) * ratio}%;
   height: ${(props) => (props.width / props.maxWidth) * ratio}%;

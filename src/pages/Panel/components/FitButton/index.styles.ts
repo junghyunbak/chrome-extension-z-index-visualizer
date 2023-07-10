@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { color } from '../../../../constants';
 
 export const layout = css`
   position: absolute;
@@ -7,8 +8,6 @@ export const layout = css`
 
   width: 10%;
   height: 10%;
-
-  padding: 1%;
 
   display: flex;
   justify-content: center;
@@ -20,7 +19,7 @@ export const layout = css`
 
   svg {
     path {
-      fill: #a2b8d1;
+      fill: ${color.borderColor};
     }
   }
 `;

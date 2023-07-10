@@ -1,5 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+
+import { useAppSelector } from '../../hooks/useAppDispatch';
 
 import { ThreeDimPlane } from './components/ThreeDimPlane';
 import { FitButton } from './components/FitButton';
@@ -13,22 +15,7 @@ function Panel() {
   const layout = useRef<HTMLDivElement | null>(null);
   const drag = useRef<HTMLDivElement | null>(null);
 
-  const [isConnected, setIsConnected] = useState<boolean>(true);
-
-  /**
-   * 주기적으로 서비스 워커가 비활성화 되었는지 점검
-   */
-  useEffect(() => {
-    const panelPort = chrome.runtime.connect();
-
-    setInterval(() => {
-      try {
-        panelPort.postMessage('hello');
-      } catch (e) {
-        setIsConnected(false);
-      }
-    }, 1000);
-  }, []);
+  const planes = useAppSelector((state) => state.content.planes);
 
   useEffect(() => {
     /**
@@ -41,26 +28,21 @@ function Panel() {
     mouseDrag(layout.current, drag.current);
   }, []);
 
+  const maxWidth = Math.max(...planes.map(({ size: { width } }) => width));
+  const maxHeight = Math.max(...planes.map(({ size: { height } }) => height));
+
   return (
     <div css={S.layout} ref={layout}>
       <Global styles={S.global} />
-      <FitButton $target={drag.current} />
+      <FitButton target={drag} />
 
-      <div css={S.dragWrapper} ref={drag}>
-        <ThreeDimPlane />
-      </div>
-
-      {!isConnected && (
-        <div css={S.errorModal}>
-          <button
-            onClick={() => {
-              chrome.tabs.reload();
-            }}
-          >
-            새로고침
-          </button>
-        </div>
-      )}
+      <S.DragWrapper ref={drag} maxWidth={maxWidth} maxHeight={maxHeight}>
+        <ThreeDimPlane
+          planes={planes}
+          maxWidth={maxWidth}
+          maxHeight={maxHeight}
+        />
+      </S.DragWrapper>
     </div>
   );
 }

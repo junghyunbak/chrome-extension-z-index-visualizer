@@ -1,12 +1,18 @@
 import React, { useEffect, useRef } from 'react';
 import { useAppSelector } from '../../../../hooks/useAppDispatch';
+import { Plane } from '../../../../types/Plane';
 import * as S from './index.styles';
 
 const activeClassName = 'active';
 
-export function ThreeDimPlane() {
+interface Props {
+  planes: Plane[];
+  maxWidth: number;
+  maxHeight: number;
+}
+
+export function ThreeDimPlane({ planes, maxWidth, maxHeight }: Props) {
   const layout = useRef<HTMLDivElement | null>(null);
-  const planes = useAppSelector((state) => state.content.planes);
   const clickedList = useAppSelector((state) => state.content.clickedList);
 
   useEffect(() => {
@@ -30,9 +36,6 @@ export function ThreeDimPlane() {
       }, 10 * (planes.length - index));
     });
   }, [planes, clickedList]);
-
-  const maxWidth = Math.max(...planes.map(({ size: { width } }) => width));
-  const maxHeight = Math.max(...planes.map(({ size: { height } }) => height));
 
   return (
     <S.Layout activeClassName={activeClassName} ref={layout}>

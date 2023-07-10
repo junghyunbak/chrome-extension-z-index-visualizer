@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 
 export const global = css`
   html,
@@ -21,11 +22,16 @@ export const layout = css`
   inset: 0;
 `;
 
-export const dragWrapper = css`
+interface DragWrapperProps {
+  maxWidth: number;
+  maxHeight: number;
+}
+
+export const DragWrapper = styled.div<DragWrapperProps>`
   position: absolute;
 
-  width: 100%;
   height: 100%;
+  aspect-ratio: 1 / ${(props) => props.maxWidth / props.maxHeight};
 
   transition: transform ease 0.3s;
 

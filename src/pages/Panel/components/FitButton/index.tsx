@@ -7,13 +7,13 @@ import {
 } from '../../../../utils/controlDom';
 
 interface Props {
-  $target: HTMLElement | null;
+  target: React.MutableRefObject<HTMLElement | null>;
 }
 
-export function FitButton({ $target }: Props) {
+export function FitButton({ target }: Props) {
   const handleFitButtonClick = () => {
-    setTopLeftPosition($target);
-    setDefaultScale($target);
+    setTopLeftPosition(target.current);
+    setDefaultScale(target.current);
   };
 
   return (
