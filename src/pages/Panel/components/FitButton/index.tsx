@@ -1,10 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import * as S from './index.styles';
-import {
-  setTopLeftPosition,
-  setDefaultScale,
-} from '../../../../utils/controlDom';
+import { setTopLeftPosition, setDefaultScale } from '../../../../utils/dom';
 
 interface Props {
   target: React.MutableRefObject<HTMLElement | null>;

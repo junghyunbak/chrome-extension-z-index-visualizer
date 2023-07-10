@@ -1,98 +1,24 @@
 import { createProxyStore } from '../../store';
-import type { Plane } from '../../types/Plane';
+
 import PortNames from '../../types/PortNames';
+
 import { updateClickedList, updatePlanes } from '../../store/slices/content';
+
+import {
+  makePlaneObjects,
+  collectHandler,
+  observerAllDomChange,
+} from '../../utils/dom';
+
+import type { HandlerOfDom, Plane } from '../../types/Plane';
 
 const proxyStore = createProxyStore(PortNames.ContentPort);
 
-type Pick<T, K extends keyof T> = {
-  [k in K]: T[k];
-};
-
-type ElementWithDepth = Pick<Plane, '$dom' | 'depth'>;
-
-const getElementsWidthDepth = (
-  $curEl: Element,
-  depth: number,
-  result: ElementWithDepth[]
-) => {
-  result.push({ $dom: $curEl, depth });
-
-  Array.from($curEl.children).forEach(($nextEl) => {
-    getElementsWidthDepth($nextEl, depth + 1, result);
-  });
-};
-
-const getPlanes = () => {
-  const planes: Plane[] = [];
-
-  const $root = document.querySelector(':root');
-
-  if (!$root) {
-    return [];
-  }
-
-  const tmp: ElementWithDepth[] = [];
-
-  getElementsWidthDepth($root, 0, tmp);
-
-  tmp.forEach((v) => {
-    const { $dom } = v;
-    const { y, x, height, width } = $dom.getBoundingClientRect();
-    const bgColor = window
-      .getComputedStyle($dom, null)
-      .getPropertyValue('background-color');
-    const tagName = $dom.tagName.toLowerCase();
-
-    if (tagName === 'span') {
-      return;
-    }
-
-    if (height === 0) {
-      return;
-    }
-
-    planes.push({ ...v, pos: { y, x }, size: { height, width }, bgColor });
-  });
-
-  planes.sort((a, b) => {
-    if (a.depth < b.depth) {
-      return -1;
-    } else if (a.depth < b.depth) {
-      return 1;
-    } else {
-      return b.size.height - a.size.height;
-    }
-  });
-
-  return planes;
-};
-
 let clickedList: number[] = [];
-let timer: ReturnType<typeof setTimeout> | null = null;
-const handlers: Array<{ $dom: Element; handler: () => void }> = [];
+const handlers: HandlerOfDom[] = [];
 
-const initial = async () => {
-  await proxyStore.ready();
-
-  const planes = getPlanes();
-
-  await proxyStore.dispatch(updatePlanes(planes));
-
-  /**
-   * 각 요소에 click 이벤트 추가
-   */
-  while (handlers.length) {
-    const top = handlers.pop();
-
-    if (!top) {
-      return;
-    }
-
-    const { $dom, handler } = top;
-
-    $dom.removeEventListener('click', handler);
-  }
+const attachHandler = (planes: Plane[]) => {
+  let timer: ReturnType<typeof setTimeout> | null = null;
 
   planes.forEach(({ $dom }, i) => {
     const handler = () => {
@@ -118,25 +44,15 @@ const initial = async () => {
   });
 };
 
-initial();
+const initial = async () => {
+  const planes = makePlaneObjects();
+  await proxyStore.dispatch(updatePlanes(planes));
+  collectHandler('click', handlers);
+  attachHandler(planes);
+};
 
-let refreshTimer: ReturnType<typeof setTimeout> | null = null;
-
-const observer = new MutationObserver((mutations) => {
-  if (mutations.length > 0) {
-    if (refreshTimer) {
-      clearTimeout(refreshTimer);
-    }
-
-    refreshTimer = setTimeout(() => {
-      console.log('inital');
-      initial();
-    }, 1500);
-  }
-});
-
-const $html = document.querySelector('html');
-
-if ($html instanceof HTMLHtmlElement) {
-  observer.observe($html, { childList: true, subtree: true });
-}
+(async () => {
+  await proxyStore.ready();
+  await initial();
+  observerAllDomChange(initial);
+})();

@@ -8,6 +8,10 @@ type Size = {
   height: number;
 };
 
+type Pick<T, K extends keyof T> = {
+  [k in K]: T[k];
+};
+
 export interface Plane {
   $dom: Element;
   depth: number;
@@ -15,3 +19,10 @@ export interface Plane {
   size: Size;
   bgColor: string;
 }
+
+export type ElementWithDepth = Pick<Plane, '$dom' | 'depth'>;
+
+export type HandlerOfDom = {
+  $dom: Element;
+  handler: () => void;
+};
