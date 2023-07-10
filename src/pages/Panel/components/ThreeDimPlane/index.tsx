@@ -9,14 +9,20 @@ interface Props {
   planes: Plane[];
   maxWidth: number;
   maxHeight: number;
+  background: React.MutableRefObject<HTMLDivElement | null>;
 }
 
-export function ThreeDimPlane({ planes, maxWidth, maxHeight }: Props) {
+export function ThreeDimPlane({
+  planes,
+  maxWidth,
+  maxHeight,
+  background,
+}: Props) {
   const layout = useRef<HTMLDivElement | null>(null);
   const clickedList = useAppSelector((state) => state.content.clickedList);
 
   useEffect(() => {
-    clickedList.forEach((index) => {
+    clickedList.forEach((index, i, arr) => {
       const $line = document.querySelector(`[data-line="${index}"]`);
 
       if (!($line instanceof HTMLDivElement)) {
@@ -33,9 +39,23 @@ export function ThreeDimPlane({ planes, maxWidth, maxHeight }: Props) {
         setTimeout(() => {
           $line.classList.remove(activeClassName);
         }, 2000);
-      }, 10 * (planes.length - index));
+      }, 50 * (arr.length - i + 1));
     });
-  }, [planes, clickedList]);
+
+    if (clickedList.includes(0)) {
+      setTimeout(() => {
+        if (background.current) {
+          background.current.style.filter = 'brightness(0.8)';
+        }
+
+        setTimeout(() => {
+          if (background.current) {
+            background.current.style.filter = '';
+          }
+        }, 2000);
+      }, 50 * (clickedList.length - 0 + 1));
+    }
+  }, [clickedList]);
 
   return (
     <S.Layout activeClassName={activeClassName} ref={layout}>

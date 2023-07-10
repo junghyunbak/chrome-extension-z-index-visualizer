@@ -20,6 +20,7 @@ interface Props {
 function Panel({ initProxyStore }: Props) {
   const layout = useRef<HTMLDivElement | null>(null);
   const drag = useRef<HTMLDivElement | null>(null);
+  const background = useRef<HTMLDivElement | null>(null);
 
   const planes = useAppSelector((state) => state.content.planes);
 
@@ -53,6 +54,15 @@ function Panel({ initProxyStore }: Props) {
   return (
     <div css={S.layout} ref={layout}>
       <Global styles={S.global} />
+
+      <div
+        css={css`
+          position: fixed;
+          inset: 0;
+          background-color: white;
+        `}
+        ref={background}
+      />
 
       <div
         css={css`
@@ -124,6 +134,7 @@ function Panel({ initProxyStore }: Props) {
           planes={planes}
           maxWidth={maxWidth}
           maxHeight={maxHeight}
+          background={background}
         />
       </S.DragWrapper>
     </div>
