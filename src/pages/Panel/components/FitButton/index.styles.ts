@@ -6,16 +6,26 @@ export const layout = css`
   bottom: 0;
   right: 0;
 
-  width: 10%;
-  height: 10%;
+  z-index: 3;
+`;
+
+export const button = css`
+  box-shadow: rgba(15, 15, 15, 0.016) 0px 0px 0px 1px,
+    rgba(15, 15, 15, 0.03) 0px 3px 6px, rgba(15, 15, 15, 0.06) 0px 9px 24px;
+
+  background-color: white;
+
+  padding: 1em;
+  margin: 0 1em 1em 0;
+
+  border: none;
+  border-radius: 10px;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
   cursor: pointer;
-
-  z-index: 3;
 
   svg {
     path {
