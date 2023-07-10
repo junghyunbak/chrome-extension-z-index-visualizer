@@ -44,6 +44,11 @@ export const makePlaneObjects = (): Plane[] => {
 
   tmp.forEach((v) => {
     const { $dom } = v;
+
+    if (!($dom instanceof Element)) {
+      return;
+    }
+
     const { y, x, height, width } = $dom.getBoundingClientRect();
     const bgColor = window
       .getComputedStyle($dom, null)
