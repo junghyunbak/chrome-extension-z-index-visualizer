@@ -1,3 +1,5 @@
+import type { Pick } from './util';
+
 type Position = {
   y: number;
   x: number;
@@ -6,10 +8,6 @@ type Position = {
 type Size = {
   width: number;
   height: number;
-};
-
-type Pick<T, K extends keyof T> = {
-  [k in K]: T[k];
 };
 
 export interface Plane {
