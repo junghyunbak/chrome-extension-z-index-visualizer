@@ -1,12 +1,13 @@
 import { Store, wrapStore } from 'webext-redux';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import type { AnyAction } from '@reduxjs/toolkit';
 
 import content from './slices/content';
 
 import type { State } from './State';
 
 export const createProxyStore = (portName: string) => {
-  const store = new Store<State>({ portName });
+  const store = new Store<State, AnyAction>({ portName });
 
   // Fix for unresolved bug in webext-redux: https://github.com/tshaddix/webext-redux/issues/286
   Object.assign(store, {
