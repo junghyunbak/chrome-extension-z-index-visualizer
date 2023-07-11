@@ -8,9 +8,7 @@ import { color } from '@/assets/style';
 import { setElementStyleForAWhile } from '@/utils/dom';
 
 import { css } from '@emotion/react';
-import * as S from './index.styles';
 
-const ACTIVED_ELEMENT_CLASS_NAME = 'active';
 const WINDOW_INDEX = -1;
 const RATIO = 85;
 const DEFAULT_DOM_BG = 'rgba(0, 0, 0, 0)';
@@ -59,11 +57,16 @@ export function QuarterViewPlane({ background }: Props) {
   const maxHeight = Math.max(...planes.map(({ size: { height } }) => height));
 
   return (
-    <S.Layout
-      activeClassName={ACTIVED_ELEMENT_CLASS_NAME}
+    <div
       ref={layout}
-      maxWidth={maxWidth}
-      maxHeight={maxHeight}
+      css={css`
+        position: relative;
+        height: 100%;
+        aspect-ratio: 1 / ${maxWidth / maxHeight};
+        display: flex;
+        flex-direction: column-reverse;
+        transform: skew(-30deg, 15deg);
+      `}
     >
       {planes.map(
         ({ pos: { y, x }, size: { height, width }, depth, bgColor }, i) => {
@@ -75,16 +78,12 @@ export function QuarterViewPlane({ background }: Props) {
                 position: absolute;
                 left: ${(y / maxHeight) * RATIO - (depth + 2)}%;
                 bottom: ${(x / maxWidth) * RATIO + (depth + 3)}%;
-
                 width: ${(height / maxHeight) * RATIO}%;
                 height: ${(width / maxWidth) * RATIO}%;
-
                 background-color: ${bgColor === DEFAULT_DOM_BG
                   ? 'white'
                   : bgColor};
-
                 transition: background-color ease 0.2s;
-
                 border: 1px solid ${color.borderColor};
                 border-radius: 5px;
               `}
@@ -92,6 +91,6 @@ export function QuarterViewPlane({ background }: Props) {
           );
         }
       )}
-    </S.Layout>
+    </div>
   );
 }
