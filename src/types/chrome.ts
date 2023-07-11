@@ -1,0 +1,3 @@
+export const enum MESSAGE_TYPE {
+  STORE_INITIALIZED = 'STORE_INITIALIZED',
+}

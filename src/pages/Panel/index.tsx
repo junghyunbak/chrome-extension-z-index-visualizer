@@ -1,40 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
+
 import Panel from './Panel';
-import type { AnyAction } from '@reduxjs/toolkit';
 
 import { createProxyStore } from '../../store';
+
 import PortNames from '../../types/PortNames';
-import { Store } from 'webext-redux';
-import { State } from '../../store/State';
+import { MESSAGE_TYPE } from '../../types/chrome';
 
-const container = document.getElementById('app-container');
-const root = createRoot(container!);
-root.render(<StoreWrapper />);
+chrome.runtime.connect({ name: PortNames.PANEL });
 
-function StoreWrapper() {
-  const [store, setStore] = useState<Store<State, AnyAction> | null>(null);
+const initPanel = async () => {
+  const proxyStore = createProxyStore(PortNames.ContentPort);
 
-  const initProxyStore = async () => {
-    const proxyStore = createProxyStore(PortNames.ContentPort);
+  await proxyStore.ready();
 
-    await proxyStore.ready();
-
-    setStore(proxyStore);
-  };
-
-  useEffect(() => {
-    initProxyStore();
-  }, []);
-
-  return (
-    <div>
-      {store && (
-        <Provider store={store}>
-          <Panel initProxyStore={initProxyStore} />
-        </Provider>
-      )}
-    </div>
+  const container = document.getElementById('app-container');
+  const root = createRoot(container!);
+  root.render(
+    <Provider store={proxyStore}>
+      <Panel />
+    </Provider>
   );
-}
+};
+
+chrome.runtime.onMessage.addListener((req) => {
+  if (req.type === MESSAGE_TYPE.STORE_INITIALIZED) {
+    initPanel();
+  }
+});
