@@ -10,7 +10,7 @@ import {
   setElementTopLeftPosition,
 } from '@/utils/dom';
 
-import { ThreeDimPlane } from '@/components/ThreeDimPlane';
+import { QuarterViewPlane } from '@/components/QuarterViewPlane';
 import { Button } from '@/components/Button';
 import { Address } from '@/components/Address';
 
@@ -58,7 +58,7 @@ function Panel() {
       </div>
 
       <div css={S.dragWrapper} ref={drag}>
-        <ThreeDimPlane background={background} />
+        <QuarterViewPlane background={background} />
       </div>
     </div>
   );
