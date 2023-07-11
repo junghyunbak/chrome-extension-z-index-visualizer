@@ -1,6 +1,7 @@
 import { Store, wrapStore } from 'webext-redux';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import type { AnyAction } from '@reduxjs/toolkit';
+import { logger } from 'redux-logger';
 
 import content from './slices/content';
 
@@ -27,6 +28,7 @@ const buildStoreWithDefaults = ({ portName }: { portName: string }) => {
   const store = configureStore({
     devTools: true,
     reducer,
+    middleware: [logger],
   });
 
   if (portName) {
