@@ -15,11 +15,20 @@ import { MESSAGE_TYPE } from '../../types/chrome';
 buildStoreWithDefaults({ portName: PortNames.ContentPort });
 
 /**
- * 아래 두 경우에 모두 실행되기 위해서 onConnect의 콜백 함수에 작성해주었다.
+ * panel은 service worker가 동작중(idle 상태가 아닐 때)일 때 사용할 수 있다.
  *
- * - idle 상태에서 깨어날 때
- * - panel이 실행되었을 때
+ * 1) panel 보다 먼저 - 첫 실행
+ * 2) panel 보다 늦게 - idle 상태에서 깨어날 때
+ *
+ * 아래는 두 경우 모두 service worker가 준비되었음을 panel에게 알리기 위한 코드이다.
  */
+
+// 1)
 chrome.runtime.onConnect.addListener((port) => {
-  chrome.runtime.sendMessage({ type: MESSAGE_TYPE.STORE_INITIALIZED });
+  if (port.name === PortNames.PANEL) {
+    chrome.runtime.sendMessage({ type: MESSAGE_TYPE.STORE_INITIALIZED });
+  }
 });
+
+// 2)
+chrome.runtime.sendMessage({ type: MESSAGE_TYPE.STORE_INITIALIZED });
