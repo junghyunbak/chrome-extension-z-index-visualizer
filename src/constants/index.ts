@@ -1,1 +1,2 @@
-export * as color from './colors';
+export * from './portNames';
+export * from './chrome';

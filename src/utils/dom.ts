@@ -1,4 +1,4 @@
-import type { Plane, ElementWithDepth, HandlerOfDom } from '@/types/Plane';
+import type { Plane, ElementWithDepth, HandlerOfDom } from '@/types/plane';
 
 export const setTopLeftPosition = ($target: HTMLElement | null) => {
   if (!$target) {

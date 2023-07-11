@@ -1,6 +1,5 @@
 import buildStoreWithDefaults from '@/store';
-import PortNames from '@/types/PortNames';
-import { MESSAGE_TYPE } from '@/types/chrome';
+import { PORT_NAMES, MESSAGE_TYPE } from '@/constants';
 
 /**
  * service worker가 idle상태로 전환되기 때문에 다음과 같은 경우에서 매번 아래의 코드들이 실행된다.
@@ -12,7 +11,7 @@ import { MESSAGE_TYPE } from '@/types/chrome';
 /**
  * idle 상태에서 깨어날 때 기존의 상태를 복구하기 위해 chrome storage를 사용하는 코드를 추가할 예정
  */
-buildStoreWithDefaults({ portName: PortNames.ContentPort });
+buildStoreWithDefaults({ portName: PORT_NAMES.CONTENT_PORT });
 
 /**
  * panel은 service worker가 동작중(idle 상태가 아닐 때)일 때 사용할 수 있다.
@@ -25,7 +24,7 @@ buildStoreWithDefaults({ portName: PortNames.ContentPort });
 
 // 1)
 chrome.runtime.onConnect.addListener((port) => {
-  if (port.name === PortNames.PANEL) {
+  if (port.name === PORT_NAMES.PANEL) {
     chrome.runtime.sendMessage({ type: MESSAGE_TYPE.STORE_INITIALIZED });
   }
 });

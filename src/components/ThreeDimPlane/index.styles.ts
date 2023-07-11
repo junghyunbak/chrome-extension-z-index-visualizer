@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { color } from '@/constants';
+import { color } from '@/assets/style';
 
 const ratio = 75;
 

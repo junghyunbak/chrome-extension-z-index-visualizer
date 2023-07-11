@@ -1,5 +1,5 @@
-import type { HandlerOfDom, Plane } from '@/types/Plane';
-import PortNames from '@/types/PortNames';
+import type { HandlerOfDom, Plane } from '@/types/plane';
+import { PORT_NAMES } from '@/constants';
 
 import { createProxyStore } from '@/store';
 import {
@@ -13,7 +13,7 @@ import {
   observerAllDomChange,
 } from '@/utils/dom';
 
-const proxyStore = createProxyStore(PortNames.ContentPort);
+const proxyStore = createProxyStore(PORT_NAMES.CONTENT_PORT);
 
 const handlers: HandlerOfDom[] = [];
 

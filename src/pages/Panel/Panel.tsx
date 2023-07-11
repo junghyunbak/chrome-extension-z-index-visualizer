@@ -12,9 +12,9 @@ import { Address } from '@/components/Address';
 
 import * as S from './Panel.styles';
 
-import ReactLogo from '@/assets/img/svg/logo.svg';
-import Fit from '@/assets/img/svg/fit.svg';
-import Refresh from '@/assets/img/svg/refresh.svg';
+import ReactLogo from '@/assets/svg/logo.svg';
+import Fit from '@/assets/svg/fit.svg';
+import Refresh from '@/assets/svg/refresh.svg';
 
 function Panel() {
   const layout = useRef<HTMLDivElement | null>(null);

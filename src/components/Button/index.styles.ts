@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { color } from '@/constants';
+import { color } from '@/assets/style';
 
 export const button = css`
   box-shadow: rgba(15, 15, 15, 0.016) 0px 0px 0px 1px,
