@@ -4,7 +4,6 @@ import React, { useEffect, useRef } from 'react';
 import { useAppSelector } from '../../hooks/useAppDispatch';
 
 import { ThreeDimPlane } from './components/ThreeDimPlane';
-import { css } from '@emotion/react';
 
 import { wheelZoomInOut, mouseDrag } from '../../utils/attachEventListener';
 import { setTopLeftPosition, setDefaultScale } from '../../utils/dom';
@@ -41,50 +40,17 @@ function Panel() {
   return (
     <div css={S.layout} ref={layout}>
       <Global styles={S.global} />
+
       <Address />
 
-      <div
-        css={css`
-          position: fixed;
-          inset: 0;
-          background-color: white;
-        `}
-        ref={background}
-      />
+      <div css={S.floor} ref={background} />
 
-      <div
-        css={css`
-          position: fixed;
-          inset: 0;
-          transform: skew(-30deg, 15deg) scale(0.5);
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        `}
-      >
+      <div css={S.tile}>
         <ReactLogo />
-        <h1
-          css={css`
-            color: #61dafb;
-          `}
-        >
-          Window
-        </h1>
+        <h1>Window</h1>
       </div>
 
-      <div
-        css={css`
-          position: absolute;
-          bottom: 0;
-          right: 0;
-          z-index: 3;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          margin: 0 1rem 1rem 0;
-        `}
-      >
+      <div css={S.controller}>
         <Button onClick={handleFitButtonClick}>
           <Fit />
         </Button>

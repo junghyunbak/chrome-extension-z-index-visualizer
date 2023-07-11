@@ -50,3 +50,34 @@ export const errorModal = css`
 
   z-index: 9999;
 `;
+
+export const controller = css`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 1rem 1rem 0;
+`;
+
+export const floor = css`
+  position: fixed;
+  inset: 0;
+  background-color: white;
+`;
+
+export const tile = css`
+  position: fixed;
+  inset: 0;
+  transform: skew(-30deg, 15deg) scale(0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h1 {
+    color: #61dafb;
+  }
+`;
