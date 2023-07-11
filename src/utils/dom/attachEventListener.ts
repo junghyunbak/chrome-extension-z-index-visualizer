@@ -2,7 +2,7 @@ const ZOOM_SPEED = 0.1;
 const ZOOM_MAX = 1.8;
 const ZOOM_MIN = 0.2;
 
-export const wheelZoomInOut = (
+export const addWheelZoomInOutListener = (
   $parent: HTMLElement | null,
   $target: HTMLElement | null
 ): void => {
@@ -31,7 +31,7 @@ export const wheelZoomInOut = (
   });
 };
 
-export const mouseDrag = (
+export const addMouseDragListener = (
   $parent: HTMLElement | null,
   $target: HTMLElement | null
 ) => {

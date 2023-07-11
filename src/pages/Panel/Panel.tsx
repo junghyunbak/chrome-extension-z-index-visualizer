@@ -3,8 +3,12 @@ import React, { useEffect, useRef } from 'react';
 
 import { Global } from '@emotion/react';
 
-import { wheelZoomInOut, mouseDrag } from '@/utils/attachEventListener';
-import { setTopLeftPosition, setDefaultScale } from '@/utils/dom';
+import {
+  addWheelZoomInOutListener,
+  addMouseDragListener,
+  setElementDefaultScale,
+  setElementTopLeftPosition,
+} from '@/utils/dom';
 
 import { ThreeDimPlane } from '@/components/ThreeDimPlane';
 import { Button } from '@/components/Button';
@@ -22,13 +26,13 @@ function Panel() {
   const background = useRef<HTMLDivElement | null>(null);
 
   const handleFitButtonClick = () => {
-    setTopLeftPosition(drag.current);
-    setDefaultScale(drag.current);
+    setElementTopLeftPosition(drag.current);
+    setElementDefaultScale(drag.current);
   };
 
   useEffect(() => {
-    wheelZoomInOut(layout.current, drag.current);
-    mouseDrag(layout.current, drag.current);
+    addWheelZoomInOutListener(layout.current, drag.current);
+    addMouseDragListener(layout.current, drag.current);
   }, []);
 
   return (

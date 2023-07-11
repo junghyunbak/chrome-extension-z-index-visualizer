@@ -1,21 +1,4 @@
-import type { Plane, ElementWithDepth, HandlerOfDom } from '@/types/plane';
-
-export const setTopLeftPosition = ($target: HTMLElement | null) => {
-  if (!$target) {
-    return;
-  }
-
-  $target.style.top = '0px';
-  $target.style.left = '0px';
-};
-
-export const setDefaultScale = ($target: HTMLElement | null) => {
-  if (!$target) {
-    return;
-  }
-
-  $target.style.transform = 'scale(1)';
-};
+import type { Plane, ElementWithDepth } from '@/types/plane';
 
 const getElementsWidthDepth = (
   $curEl: Element,
@@ -77,39 +60,4 @@ export const makePlaneObjects = (): Plane[] => {
   });
 
   return planes;
-};
-
-export const collectHandler = (eventName: string, handlers: HandlerOfDom[]) => {
-  while (handlers.length) {
-    const top = handlers.pop();
-
-    if (!top) {
-      return;
-    }
-
-    const { $dom, handler } = top;
-
-    $dom.removeEventListener(eventName, handler);
-  }
-};
-
-export const observerAllDomChange = (callback: () => void) => {
-  let refreshTimer: ReturnType<typeof setTimeout> | null = null;
-
-  const observer = new MutationObserver((mutations) => {
-    if (mutations.length > 0) {
-      if (refreshTimer) {
-        clearTimeout(refreshTimer);
-      }
-
-      refreshTimer = setTimeout(() => {
-        callback();
-      }, 1500);
-    }
-  });
-  const $html = document.querySelector('html');
-
-  if ($html instanceof HTMLHtmlElement) {
-    observer.observe($html, { childList: true, subtree: true });
-  }
 };
