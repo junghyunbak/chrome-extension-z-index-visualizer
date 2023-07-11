@@ -1,4 +1,4 @@
-import type { Plane } from '../../types/Plane';
+import type { Plane } from '@/types/Plane';
 
 const enum UPDATE_CONTENT {
   PLANES = 'PLANES',

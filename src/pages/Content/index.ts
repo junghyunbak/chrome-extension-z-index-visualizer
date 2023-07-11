@@ -1,16 +1,17 @@
-import type { HandlerOfDom, Plane } from '../../types/Plane';
-import { createProxyStore } from '../../store';
-import PortNames from '../../types/PortNames';
+import type { HandlerOfDom, Plane } from '@/types/Plane';
+import PortNames from '@/types/PortNames';
+
+import { createProxyStore } from '@/store';
 import {
   updateClickedList,
   updateCurrentHref,
   updatePlanes,
-} from '../../store/slices/content';
+} from '@/store/slices/content';
 import {
   makePlaneObjects,
   collectHandler,
   observerAllDomChange,
-} from '../../utils/dom';
+} from '@/utils/dom';
 
 const proxyStore = createProxyStore(PortNames.ContentPort);
 

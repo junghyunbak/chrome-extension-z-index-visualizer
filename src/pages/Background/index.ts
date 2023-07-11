@@ -1,6 +1,6 @@
-import buildStoreWithDefaults from '../../store';
-import PortNames from '../../types/PortNames';
-import { MESSAGE_TYPE } from '../../types/chrome';
+import buildStoreWithDefaults from '@/store';
+import PortNames from '@/types/PortNames';
+import { MESSAGE_TYPE } from '@/types/chrome';
 
 /**
  * service worker가 idle상태로 전환되기 때문에 다음과 같은 경우에서 매번 아래의 코드들이 실행된다.

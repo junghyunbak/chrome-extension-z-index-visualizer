@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useAppSelector } from '../../hooks/useAppDispatch';
+import { useAppSelector } from '@/hooks/useAppDispatch';
 import * as S from './index.styles';
 
 const activeClassName = 'active';

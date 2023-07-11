@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import { css } from '@emotion/react';
-import { useAppSelector } from '../../hooks/useAppDispatch';
+import { useAppSelector } from '@/hooks/useAppDispatch';
 
 export function Address() {
   const href = useAppSelector((state) => state.content.currentHref);

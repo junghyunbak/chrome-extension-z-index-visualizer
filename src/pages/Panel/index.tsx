@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import type { AnyAction } from '@reduxjs/toolkit';
+import type { Store } from 'webext-redux';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 
 import Panel from './Panel';
 
-import { createProxyStore } from '../../store';
+import type { State } from '@/store/State';
+import { createProxyStore } from '@/store';
 
-import PortNames from '../../types/PortNames';
-import { MESSAGE_TYPE } from '../../types/chrome';
-
-import type { AnyAction } from '@reduxjs/toolkit';
-import type { Store } from 'webext-redux';
-import type { State } from '../../store/State';
+import PortNames from '@/types/PortNames';
+import { MESSAGE_TYPE } from '@/types/chrome';
 
 const container = document.getElementById('app-container');
 const root = createRoot(container!);
