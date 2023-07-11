@@ -1,13 +1,18 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useRef } from 'react';
+
 import { useAppSelector } from '@/hooks/useAppDispatch';
-import { css } from '@emotion/react';
+
 import { color } from '@/assets/style';
+
+import { setElementStyleForAWhile } from '@/utils/dom';
+
+import { css } from '@emotion/react';
 import * as S from './index.styles';
 
 const ACTIVED_ELEMENT_CLASS_NAME = 'active';
 const WINDOW_INDEX = -1;
-const RATIO = 75;
+const RATIO = 85;
 const DEFAULT_DOM_BG = 'rgba(0, 0, 0, 0)';
 
 interface Props {
@@ -23,17 +28,16 @@ export function QuarterViewPlane({ background }: Props) {
   useEffect(() => {
     clickedList.forEach((index, i, arr) => {
       if (index === WINDOW_INDEX) {
-        setTimeout(() => {
-          if (background.current) {
-            background.current.style.filter = 'brightness(0.8)';
-          }
+        if (!background.current) {
+          return;
+        }
 
-          setTimeout(() => {
-            if (background.current) {
-              background.current.style.filter = '';
-            }
-          }, 2000);
-        }, 50 * (clickedList.length - 0 + 1));
+        setElementStyleForAWhile(
+          background.current,
+          { filter: 'brightness(0.8)' },
+          50 * (clickedList.length - 0 + 1),
+          2000
+        );
       } else {
         const $line = document.querySelector(`[data-line="${index}"]`);
 
@@ -41,19 +45,12 @@ export function QuarterViewPlane({ background }: Props) {
           return;
         }
 
-        if (
-          Array.from($line.classList).indexOf(ACTIVED_ELEMENT_CLASS_NAME) !== -1
-        ) {
-          $line.classList.remove(ACTIVED_ELEMENT_CLASS_NAME);
-        }
-
-        setTimeout(() => {
-          $line.classList.add(ACTIVED_ELEMENT_CLASS_NAME);
-
-          setTimeout(() => {
-            $line.classList.remove(ACTIVED_ELEMENT_CLASS_NAME);
-          }, 2000);
-        }, 50 * (arr.length - i + 1));
+        setElementStyleForAWhile(
+          $line,
+          { filter: 'brightness(0.8)' },
+          50 * (arr.length - i + 1),
+          2000
+        );
       }
     });
   }, [clickedList, background]);
