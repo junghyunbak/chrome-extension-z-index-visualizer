@@ -1,18 +1,18 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useRef } from 'react';
 
-import { ThreeDimPlane } from './components/ThreeDimPlane';
+import { ThreeDimPlane } from '../../components/ThreeDimPlane';
 
 import { wheelZoomInOut, mouseDrag } from '../../utils/attachEventListener';
 import { setTopLeftPosition, setDefaultScale } from '../../utils/dom';
 
 import { Global } from '@emotion/react';
 import * as S from './Panel.styles';
-import { Button } from './components/Button';
-import { Address } from './components/Address';
+import { Button } from '../../components/Button';
+import { Address } from '../../components/Address';
 
-import ReactLogo from '../../assets/img/svg/logo.svg';
-import Fit from '../../assets/img/svg/fit.svg';
+import ReactLogo from '@/assets/img/svg/logo.svg';
+import Fit from '@/assets/img/svg/fit.svg';
 import Refresh from '../../assets/img/svg/refresh.svg';
 
 function Panel() {
