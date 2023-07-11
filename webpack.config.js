@@ -23,7 +23,6 @@ var fileExtensions = [
   'gif',
   'eot',
   'otf',
-  'svg',
   'ttf',
   'woff',
   'woff2',
@@ -84,6 +83,11 @@ var options = {
         // options: {
         //   name: '[name].[ext]',
         // },
+      },
+      {
+        test: /\.svg$/i,
+        issuer: /\.[jt]sx?$/,
+        use: ['@svgr/webpack'],
       },
       {
         test: /\.html$/,

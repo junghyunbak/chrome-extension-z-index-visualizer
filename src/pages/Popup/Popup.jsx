@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../../assets/img/logo.svg';
+import logo from '../../assets/img/svg/logo.svg';
 import Greetings from '../../containers/Greetings/Greetings';
 import './Popup.css';
 
