@@ -1,7 +1,11 @@
 import type { HandlerOfDom, Plane } from '../../types/Plane';
 import { createProxyStore } from '../../store';
 import PortNames from '../../types/PortNames';
-import { updateClickedList, updatePlanes } from '../../store/slices/content';
+import {
+  updateClickedList,
+  updateCurrentHref,
+  updatePlanes,
+} from '../../store/slices/content';
 import {
   makePlaneObjects,
   collectHandler,
@@ -51,6 +55,7 @@ const attachHandler = (planes: Plane[]) => {
 const initial = async () => {
   const planes = makePlaneObjects();
   await proxyStore.dispatch(updatePlanes(planes));
+  await proxyStore.dispatch(updateCurrentHref(window.location.href));
   collectHandler('click', handlers);
   attachHandler(planes);
 };
@@ -58,8 +63,8 @@ const initial = async () => {
 /**
  * 진입점(entry)
  */
-(async () => {
+window.addEventListener('load', async () => {
   await proxyStore.ready();
   await initial();
   observerAllDomChange(initial);
-})();
+});

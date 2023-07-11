@@ -12,6 +12,7 @@ import { setTopLeftPosition, setDefaultScale } from '../../utils/dom';
 import { Global } from '@emotion/react';
 import * as S from './Panel.styles';
 import { Button } from './components/Button';
+import { Address } from './components/Address';
 
 interface Props {
   initProxyStore: () => void;
@@ -31,10 +32,6 @@ function Panel({ initProxyStore }: Props) {
 
   const handleRefreshStoreButtonClick = () => {
     initProxyStore();
-
-    if (window.confirm('새로고침이 필요합니다.')) {
-      chrome.tabs.reload();
-    }
   };
 
   useEffect(() => {
@@ -54,6 +51,7 @@ function Panel({ initProxyStore }: Props) {
   return (
     <div css={S.layout} ref={layout}>
       <Global styles={S.global} />
+      <Address />
 
       <div
         css={css`
