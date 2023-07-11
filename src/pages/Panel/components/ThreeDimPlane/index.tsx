@@ -1,25 +1,18 @@
 import React, { useEffect, useRef } from 'react';
 import { useAppSelector } from '../../../../hooks/useAppDispatch';
-import { Plane } from '../../../../types/Plane';
 import * as S from './index.styles';
 
 const activeClassName = 'active';
 
 interface Props {
-  planes: Plane[];
-  maxWidth: number;
-  maxHeight: number;
   background: React.MutableRefObject<HTMLDivElement | null>;
 }
 
-export function ThreeDimPlane({
-  planes,
-  maxWidth,
-  maxHeight,
-  background,
-}: Props) {
+export function ThreeDimPlane({ background }: Props) {
   const layout = useRef<HTMLDivElement | null>(null);
+
   const clickedList = useAppSelector((state) => state.content.clickedList);
+  const planes = useAppSelector((state) => state.content.planes);
 
   useEffect(() => {
     clickedList.forEach((index, i, arr) => {
@@ -57,10 +50,18 @@ export function ThreeDimPlane({
         }, 50 * (clickedList.length - 0 + 1));
       }
     });
-  }, [clickedList]);
+  }, [clickedList, background]);
+
+  const maxWidth = Math.max(...planes.map(({ size: { width } }) => width));
+  const maxHeight = Math.max(...planes.map(({ size: { height } }) => height));
 
   return (
-    <S.Layout activeClassName={activeClassName} ref={layout}>
+    <S.Layout
+      activeClassName={activeClassName}
+      ref={layout}
+      maxWidth={maxWidth}
+      maxHeight={maxHeight}
+    >
       {planes.map(
         ({ pos: { y, x }, size: { height, width }, depth, bgColor }, i) => {
           return (

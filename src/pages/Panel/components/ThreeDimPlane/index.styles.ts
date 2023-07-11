@@ -5,12 +5,15 @@ const ratio = 75;
 
 interface LayoutProps {
   activeClassName: string;
+  maxWidth: number;
+  maxHeight: number;
 }
 
 export const Layout = styled.div<LayoutProps>`
   position: relative;
-  width: 100%;
+
   height: 100%;
+  aspect-ratio: 1 / ${(props) => props.maxWidth / props.maxHeight};
 
   box-sizing: border-box;
 

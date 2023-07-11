@@ -22,16 +22,10 @@ export const layout = css`
   inset: 0;
 `;
 
-interface DragWrapperProps {
-  maxWidth: number;
-  maxHeight: number;
-}
-
-export const DragWrapper = styled.div<DragWrapperProps>`
+export const dragWrapper = css`
   position: absolute;
 
   height: 100%;
-  aspect-ratio: 1 / ${(props) => props.maxWidth / props.maxHeight};
 
   transition: transform ease 0.3s;
 
