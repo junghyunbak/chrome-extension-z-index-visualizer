@@ -28,12 +28,17 @@ export function QuarterViewPlane({ background }: Props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const topIndex = clickedList[clickedList.length - 1];
+
+    setElementStyleForAWhile(
+      document.querySelector(`[data-line="${topIndex}"]`),
+      { transform: 'translate3d(3px, 3px, 0)' },
+      0,
+      100
+    );
+
     clickedList.forEach((index, i, arr) => {
       if (index === WINDOW_INDEX) {
-        if (!background.current) {
-          return;
-        }
-
         setElementStyleForAWhile(
           background.current,
           { filter: 'brightness(0.8)' },
@@ -41,14 +46,8 @@ export function QuarterViewPlane({ background }: Props) {
           2000
         );
       } else {
-        const $line = document.querySelector(`[data-line="${index}"]`);
-
-        if (!($line instanceof HTMLDivElement)) {
-          return;
-        }
-
         setElementStyleForAWhile(
-          $line,
+          document.querySelector(`[data-line="${index}"]`),
           { filter: 'brightness(0.8)' },
           50 * (arr.length - i + 1),
           2000
