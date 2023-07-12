@@ -27,6 +27,8 @@ class PlaneModule implements Controller<State> {
       return;
     }
 
+    this.model.initState();
+
     const { store, planes } = this.model.getState();
 
     if (!store) {
@@ -34,8 +36,6 @@ class PlaneModule implements Controller<State> {
     }
 
     await store.ready();
-
-    this.model.initState();
 
     this.collectHandler();
 
