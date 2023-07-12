@@ -80,7 +80,11 @@ export function QuarterViewPlane({ background }: Props) {
           return (
             <div
               data-line={i}
-              key={i}
+              /**
+               * 항상 갱신되어야 하는 요소이므로 key값을 의도적으로 지정하지 않음.
+               * 고유한 key값을 설정하는것은 설정하지 않는 것과 다를바가 없음.
+               */
+              key={null}
               css={css`
                 position: absolute;
                 left: ${(y / maxHeight) * RATIO - (depth + 2)}%;
