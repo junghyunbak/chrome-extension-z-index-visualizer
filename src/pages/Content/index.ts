@@ -1,6 +1,6 @@
 import { PORT_NAMES } from '@/constants';
 
-import ClickController from './controllers/ClickController';
+import PlaneModule from './modules/Plane';
 
 import { createProxyStore } from '@/store';
 
@@ -11,12 +11,12 @@ const initialize = async () => {
   const proxyStore = createProxyStore(PORT_NAMES.CONTENT_PORT);
 
   /**
-   * register controller
+   * register modules
    */
-  const controllers = [new ClickController(proxyStore)];
+  const modules = [new PlaneModule(proxyStore)];
 
   await proxyStore.ready();
-  await Promise.all(controllers.map((controller) => controller.register()));
+  await Promise.all(modules.map((module) => module.register()));
 };
 
 initialize();
