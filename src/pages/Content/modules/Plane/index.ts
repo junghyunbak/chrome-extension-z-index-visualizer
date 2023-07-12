@@ -4,7 +4,6 @@ import type { HandlerOfDom } from '@/types/plane';
 import type { Model } from '@/pages/Content/contracts/Model';
 import type { State } from './Model';
 import { Store } from 'webext-redux';
-import { debounce } from '@/utils';
 import { updateClickedList } from '@/store/slices/content';
 
 class PlaneModule implements Controller<State> {
@@ -12,9 +11,10 @@ class PlaneModule implements Controller<State> {
 
   handlers: HandlerOfDom[] = [];
 
+  timer: ReturnType<typeof setTimeout> | null = null;
+
   constructor(store: Store) {
     this.model = new PlaneModel(store) as Model<State>;
-    console.log('new plane module', this.model);
   }
 
   async register(): Promise<void> {
@@ -23,7 +23,6 @@ class PlaneModule implements Controller<State> {
   }
 
   async attachHandler(): Promise<void> {
-    console.log('attach handler');
     if (!this.model) {
       return;
     }
@@ -80,7 +79,14 @@ class PlaneModule implements Controller<State> {
 
     this.model.setState({ clickedList: [...clickedList, index] });
 
-    debounce(this.updateClickedListDebounceCallback.bind(this), 500)();
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+
+    this.timer = setTimeout(
+      this.updateClickedListDebounceCallback.bind(this),
+      500
+    );
   };
 
   updateClickedListDebounceCallback() {
@@ -100,10 +106,14 @@ class PlaneModule implements Controller<State> {
   observeAllDomChange() {
     const config = { childList: true, subtree: true };
 
-    const observer = new MutationObserver(() => {
-      const domChange = debounce(this.attachHandler.bind(this), 1500);
+    let timer: ReturnType<typeof setTimeout> | null = null;
 
-      domChange();
+    const observer = new MutationObserver(() => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+
+      timer = setTimeout(this.attachHandler.bind(this), 1500);
     });
 
     const $html = document.querySelector('html');
