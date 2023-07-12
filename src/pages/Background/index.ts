@@ -39,4 +39,4 @@ chrome.runtime.onConnect.addListener((port) => {
 });
 
 // 2)
-chrome.runtime.sendMessage({ type: MESSAGE_TYPE.STORE_INITIALIZED });
+//chrome.runtime.sendMessage({ type: MESSAGE_TYPE.STORE_INITIALIZED });
