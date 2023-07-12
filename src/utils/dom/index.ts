@@ -1,5 +1,3 @@
-export * from './collectHandlers';
-export * from './observeAllDomChange';
 export * from './attachEventListener';
-export * from './makePlaneObject';
+export * from './plane';
 export * from './setStyle';
