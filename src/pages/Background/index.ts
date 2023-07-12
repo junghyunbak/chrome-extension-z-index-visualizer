@@ -32,11 +32,13 @@ import { getPrivousState } from '@/utils/chrome';
  */
 
 // 1)
+/*
 chrome.runtime.onConnect.addListener((port) => {
   if (port.name === PORT_NAMES.PANEL) {
     chrome.runtime.sendMessage({ type: MESSAGE_TYPE.STORE_INITIALIZED });
   }
 });
+*/
 
 // 2)
 //chrome.runtime.sendMessage({ type: MESSAGE_TYPE.STORE_INITIALIZED });

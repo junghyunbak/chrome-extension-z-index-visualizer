@@ -9,7 +9,7 @@ import Panel from './Panel';
 import type { State } from '@/store/State';
 import { createProxyStore } from '@/store';
 
-import { PORT_NAMES, MESSAGE_TYPE } from '@/constants';
+import { PORT_NAMES } from '@/constants';
 
 const container = document.getElementById('app-container');
 const root = createRoot(container!);
@@ -25,13 +25,7 @@ function StoreWrapper() {
   };
 
   useEffect(() => {
-    chrome.runtime.onMessage.addListener((req) => {
-      if (req.type === MESSAGE_TYPE.STORE_INITIALIZED) {
-        initProxyStore();
-      }
-    });
-
-    chrome.runtime.connect({ name: PORT_NAMES.PANEL });
+    initProxyStore();
   }, []);
 
   return (
