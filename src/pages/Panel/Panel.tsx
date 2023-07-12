@@ -18,8 +18,13 @@ import * as S from './Panel.styles';
 
 import ReactLogo from '@/assets/svg/logo.svg';
 import Fit from '@/assets/svg/fit.svg';
+import Refresh from '@/assets/svg/refresh.svg';
 
-function Panel() {
+interface Props {
+  initProxyStore: () => void;
+}
+
+function Panel({ initProxyStore }: Props) {
   const layout = useRef<HTMLDivElement | null>(null);
   const drag = useRef<HTMLDivElement | null>(null);
   const background = useRef<HTMLDivElement | null>(null);
@@ -50,6 +55,9 @@ function Panel() {
       <div css={S.controller}>
         <Button onClick={handleFitButtonClick}>
           <Fit />
+        </Button>
+        <Button onClick={initProxyStore}>
+          <Refresh />
         </Button>
       </div>
 
