@@ -2,12 +2,14 @@
 import React, { useEffect, useRef } from 'react';
 
 import { useAppSelector } from '@/hooks/useAppDispatch';
+import { useDispatch } from 'react-redux';
 
 import { color } from '@/assets/style';
 
 import { setElementStyleForAWhile } from '@/utils/dom';
 
 import { css } from '@emotion/react';
+import { updateClickedList } from '@/store/slices/content';
 
 const WINDOW_INDEX = -1;
 const RATIO = 85;
@@ -22,6 +24,8 @@ export function QuarterViewPlane({ background }: Props) {
 
   const clickedList = useAppSelector((state) => state.content.clickedList);
   const planes = useAppSelector((state) => state.content.planes);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     clickedList.forEach((index, i, arr) => {
@@ -51,6 +55,10 @@ export function QuarterViewPlane({ background }: Props) {
         );
       }
     });
+
+    if (clickedList.length) {
+      dispatch(updateClickedList([]));
+    }
   }, [clickedList, background]);
 
   const maxWidth = Math.max(...planes.map(({ size: { width } }) => width));
