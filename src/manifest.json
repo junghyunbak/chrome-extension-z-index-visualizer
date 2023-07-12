@@ -23,5 +23,5 @@
       "matches": []
     }
   ],
-  "permissions": ["storage"]
+  "permissions": ["storage", "idle"]
 }

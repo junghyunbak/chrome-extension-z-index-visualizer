@@ -26,6 +26,12 @@ function StoreWrapper() {
 
   useEffect(() => {
     initProxyStore();
+
+    chrome.idle.onStateChanged.addListener((newState) => {
+      if (newState === 'active') {
+        initProxyStore();
+      }
+    });
   }, []);
 
   return (
