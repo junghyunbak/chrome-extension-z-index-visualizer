@@ -26,21 +26,21 @@ export const setElementStyleForAWhile = (
   }
 
   Object.entries(styles).forEach(([key]) => {
-    if (!$target.style[key]) {
+    if (!$target.style.getPropertyValue(key)) {
       return;
     }
 
-    $target.style[key] = '';
+    $target.style.setProperty(key, '');
   });
 
   setTimeout(() => {
     Object.entries(styles).forEach(([key, value]) => {
-      $target.style[key] = value;
+      $target.style.setProperty(key, value);
     });
 
     setTimeout(() => {
       Object.entries(styles).forEach(([key, value]) => {
-        $target.style[key] = '';
+        $target.style.setProperty(key, '');
       });
     }, duration);
   }, delay);
