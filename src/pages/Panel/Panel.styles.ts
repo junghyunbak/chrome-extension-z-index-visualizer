@@ -59,6 +59,7 @@ export const floor = css`
   position: fixed;
   inset: 0;
   background-color: white;
+  transition: filter ease 0.5s;
 `;
 
 export const tile = css`

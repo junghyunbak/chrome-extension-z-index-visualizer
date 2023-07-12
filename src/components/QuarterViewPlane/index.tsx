@@ -91,7 +91,7 @@ export function QuarterViewPlane({ background }: Props) {
                 background-color: ${bgColor === DEFAULT_DOM_BG
                   ? 'white'
                   : bgColor};
-                transition: background-color ease 0.2s;
+                transition: filter ease 0.5s;
                 border: 1px solid ${color.borderColor};
                 border-radius: 5px;
               `}
