@@ -18,7 +18,6 @@ import * as S from './Panel.styles';
 
 import ReactLogo from '@/assets/svg/logo.svg';
 import Fit from '@/assets/svg/fit.svg';
-import Refresh from '@/assets/svg/refresh.svg';
 
 function Panel() {
   const layout = useRef<HTMLDivElement | null>(null);
