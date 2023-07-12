@@ -52,9 +52,6 @@ function Panel() {
         <Button onClick={handleFitButtonClick}>
           <Fit />
         </Button>
-        <Button>
-          <Refresh />
-        </Button>
       </div>
 
       <div css={S.dragWrapper} ref={drag}>
