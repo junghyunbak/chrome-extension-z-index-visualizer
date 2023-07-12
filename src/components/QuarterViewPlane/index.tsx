@@ -42,14 +42,14 @@ export function QuarterViewPlane({ background }: Props) {
         setElementStyleForAWhile(
           background.current,
           { filter: 'brightness(0.8)' },
-          50 * (clickedList.length - 0 + 1),
+          70 * (clickedList.length - 0 + 1),
           2000
         );
       } else {
         setElementStyleForAWhile(
           document.querySelector(`[data-line="${index}"]`),
           { filter: 'brightness(0.8)' },
-          50 * (arr.length - i + 1),
+          70 * (arr.length - i + 1),
           2000
         );
       }
@@ -90,7 +90,7 @@ export function QuarterViewPlane({ background }: Props) {
                 background-color: ${bgColor === DEFAULT_DOM_BG
                   ? 'white'
                   : bgColor};
-                transition: filter ease 0.5s;
+                transition: filter ease 0.2s;
                 border: 1px solid ${color.borderColor};
                 border-radius: 5px;
               `}
