@@ -1,3 +1,4 @@
+import { zIndex } from '@/assets/style';
 import { css } from '@emotion/react';
 
 export const global = css`
@@ -35,20 +36,11 @@ export const dragWrapper = css`
   }
 `;
 
-export const errorModal = css`
-  position: fixed;
-  inset: 0;
-
-  background-color: black;
-
-  z-index: 9999;
-`;
-
 export const controller = css`
   position: absolute;
   bottom: 0;
   right: 0;
-  z-index: 3;
+  z-index: ${zIndex.controller};
   display: flex;
   align-items: center;
   gap: 0.5rem;

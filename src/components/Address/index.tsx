@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { css } from '@emotion/react';
 import { useAppSelector } from '@/hooks/useAppDispatch';
+import { zIndex } from '@/assets/style';
 
 export function Address() {
   const contentHref = useAppSelector((state) => state.content.currentHref);
@@ -49,7 +50,7 @@ export function Address() {
         position: fixed;
         top: 0;
         left: 0;
-        z-index: 5;
+        z-index: ${zIndex.addressTable};
 
         table {
           border-collapse: collapse;
