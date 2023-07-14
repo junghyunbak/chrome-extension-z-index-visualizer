@@ -38,7 +38,7 @@ function StoreWrapper() {
     <div>
       {store && (
         <Provider store={store}>
-          <Panel initProxyStore={initProxyStore} />
+          <Panel />
         </Provider>
       )}
     </div>
