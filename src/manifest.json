@@ -11,7 +11,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*", "<all_urls>"],
+      "matches": ["http://localhost:*/*", "http://127.0.0.1:*/*"],
       "js": ["contentScript.bundle.js"],
       "css": ["content.styles.css"]
     }
@@ -23,5 +23,5 @@
       "matches": []
     }
   ],
-  "permissions": ["storage"]
+  "permissions": ["storage", "tabs"]
 }
