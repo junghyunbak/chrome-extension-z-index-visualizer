@@ -9,7 +9,7 @@ import Panel from './Panel';
 import type { State } from '@/store/State';
 import { createProxyStore } from '@/store';
 
-import { PORT_NAMES } from '@/constants';
+import { MESSAGE_TYPE, PORT_NAMES } from '@/constants';
 
 const container = document.getElementById('app-container');
 const root = createRoot(container!);
@@ -27,8 +27,8 @@ function StoreWrapper() {
   useEffect(() => {
     initProxyStore();
 
-    chrome.idle.onStateChanged.addListener((newState) => {
-      if (newState === 'active') {
+    chrome.runtime.onMessage.addListener((message) => {
+      if (message.type === MESSAGE_TYPE.STORE_INITIALIZED) {
         initProxyStore();
       }
     });
