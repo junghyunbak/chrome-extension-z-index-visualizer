@@ -53,6 +53,14 @@ export function Address() {
 
         table {
           border-collapse: collapse;
+
+          p {
+            margin: 0;
+          }
+
+          th {
+            background-color: lightgray;
+          }
         }
 
         table,
