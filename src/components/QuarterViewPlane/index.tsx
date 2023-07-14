@@ -78,12 +78,9 @@ export function QuarterViewPlane({ background }: Props) {
       {planes.map(
         ({ pos: { y, x }, size: { height, width }, depth, bgColor }, i) => {
           return (
-            /**
-             * 항상 갱신되어야 하는 요소이므로 key값을 의도적으로 지정하지 않음.
-             * 고유한 key값을 설정하는것은 설정하지 않는 것과 다를바가 없음.
-             */
             <div
               data-line={i}
+              key={[y, x, height, width, depth, bgColor, i].join('|')}
               css={css`
                 position: absolute;
                 left: ${(y / maxHeight) * RATIO - (depth + 2)}%;
