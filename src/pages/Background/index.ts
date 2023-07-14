@@ -16,8 +16,10 @@ import { getPrivousState } from '@/utils/chrome';
   /**
    * service worker가 idle -> active 상태로 변할 때 마다
    * panel로 메세지를 보내어 proxyStore를 초기화 하도록 함.
-   *
-   * panel이 하나도 열려있지 않은 상태일 땐 오류가 발생함. (해결 필요)
    */
-  chrome.runtime.sendMessage({ type: MESSAGE_TYPE.STORE_INITIALIZED });
+  try {
+    await chrome.runtime.sendMessage({ type: MESSAGE_TYPE.STORE_INITIALIZED });
+  } catch (error) {
+    console.log(error);
+  }
 })();
