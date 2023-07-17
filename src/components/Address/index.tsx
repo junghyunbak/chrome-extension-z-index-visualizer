@@ -11,10 +11,6 @@ export function Address() {
 
   const myTabId = useRef<number>(-1);
 
-  const isLocalhost = () => {
-    return /http:\/\/(localhost|127.0.0.1):[0-9]*\/.*/.test(currentUrl);
-  };
-
   const isSameUrl = () => {
     return currentUrl === contentHref;
   };
@@ -54,22 +50,27 @@ export function Address() {
 
         table {
           border-collapse: collapse;
+          background-color: white;
 
           p {
             margin: 0;
           }
 
           th {
-            background-color: lightgray;
+            background-color: #f1f3f4;
+            font-weight: normal;
           }
-        }
 
-        table,
-        tr,
-        th,
-        td {
-          border: 1px solid black;
-          background-color: white;
+          tr,
+          th {
+            border-bottom: 1px solid #cacdd1;
+            border-right: 1px solid #cacdd1;
+          }
+
+          th,
+          td {
+            padding: 5px;
+          }
         }
       `}
     >
@@ -84,13 +85,7 @@ export function Address() {
           <tr>
             <th>current page</th>
             <td>
-              <p
-                css={css`
-                  text-decoration: ${isLocalhost() ? 'line-through' : 'none'};
-                `}
-              >
-                {currentUrl}
-              </p>
+              <p>{currentUrl}</p>
             </td>
           </tr>
           <tr>
@@ -100,11 +95,7 @@ export function Address() {
           <tr>
             <th>state</th>
             <td>
-              {!isLocalhost() ? (
-                <p>
-                  <StateBullet type={'red'} /> Works only on localhost.
-                </p>
-              ) : !isSameUrl() ? (
+              {!isSameUrl() ? (
                 <p>
                   <StateBullet type={'orange'} /> A page refresh is required.
                 </p>
