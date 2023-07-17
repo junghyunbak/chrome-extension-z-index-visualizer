@@ -84,17 +84,13 @@ export function Address() {
           <tr>
             <th>current page</th>
             <td>
-              {!isLocalhost() ? (
-                <p
-                  css={css`
-                    text-decoration: line-through;
-                  `}
-                >
-                  {currentUrl}
-                </p>
-              ) : (
-                <p>{currentUrl}</p>
-              )}
+              <p
+                css={css`
+                  text-decoration: ${isLocalhost() ? 'line-through' : 'none'};
+                `}
+              >
+                {currentUrl}
+              </p>
             </td>
           </tr>
           <tr>
