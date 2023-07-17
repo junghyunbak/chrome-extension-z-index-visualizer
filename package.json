@@ -1,6 +1,6 @@
 {
   "name": "DOM-Click-Visualizer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "개발자도구 패널에서 DOM 요소에 클릭 이벤트가 발생했을 때, 버블링되는 요소를 시각적으로 확인할 수 있는 크롬 확장프로그램입니다.",
   "license": "MIT",
   "repository": {
