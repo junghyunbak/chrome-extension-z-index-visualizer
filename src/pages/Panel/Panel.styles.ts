@@ -18,6 +18,7 @@ export const global = css`
 
   .drag {
     cursor: grab;
+    border: 2px solid royalblue;
   }
 
   .drag:active {
@@ -58,5 +59,6 @@ export const tile = css`
 
   h1 {
     color: #61dafb;
+    user-select: none;
   }
 `;
