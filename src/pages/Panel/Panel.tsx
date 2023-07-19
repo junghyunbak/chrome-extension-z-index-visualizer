@@ -155,7 +155,16 @@ const Test = ({ planeTree, ...refs }: Props) => {
         z-index: ${planeTree.zIndex};
 
         div:first-of-type > div:first-of-type {
-          border-style: dashed;
+          background: linear-gradient(
+            45deg,
+            lightgray 25%,
+            white 0,
+            white 50%,
+            lightgray 0,
+            lightgray 75%,
+            white 0
+          );
+          background-size: 20px 20px;
         }
       `}
     >
