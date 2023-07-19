@@ -31,7 +31,7 @@ function Panel() {
 
   const planeTree = useAppSelector((state) => state.content.planeTree);
 
-  useGlobalDrag($drag.current);
+  useGlobalDrag($drag);
 
   useEffect(() => {
     const handleWindowKeydown = (e: KeyboardEvent) => {
@@ -148,6 +148,10 @@ const Test = ({ planeTree, ...refs }: Props) => {
       ref={wrapper}
       css={css`
         position: relative;
+
+        div:first-of-type > div:first-of-type {
+          border: 1px solid blue;
+        }
       `}
     >
       <QuarterViewPlane

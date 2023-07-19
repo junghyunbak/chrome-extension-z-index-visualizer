@@ -1,11 +1,9 @@
-import { useEffect } from 'react';
+import { MutableRefObject, useEffect } from 'react';
 
-export const useGlobalDrag = ($target: HTMLElement | null) => {
+export const useGlobalDrag = (
+  $target: MutableRefObject<HTMLElement | null>
+) => {
   useEffect(() => {
-    if (!$target) {
-      return;
-    }
-
     let isMousePress = false;
     let isSpacePress = false;
     let prevPosX = 0;
@@ -31,7 +29,7 @@ export const useGlobalDrag = ($target: HTMLElement | null) => {
     };
 
     const handleWindowMousemove = (e: MouseEvent) => {
-      if (!isMousePress || !isSpacePress) {
+      if (!isMousePress || !isSpacePress || !$target.current) {
         return;
       }
 
@@ -41,8 +39,8 @@ export const useGlobalDrag = ($target: HTMLElement | null) => {
       prevPosX = e.clientX;
       prevPosY = e.clientY;
 
-      $target.style.left = `${$target.offsetLeft - posX}px`;
-      $target.style.top = `${$target.offsetTop - posY}px`;
+      $target.current.style.left = `${$target.current.offsetLeft - posX}px`;
+      $target.current.style.top = `${$target.current.offsetTop - posY}px`;
     };
 
     const handleWindowMouseup = () => {
