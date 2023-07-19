@@ -27,7 +27,11 @@ export function QuarterViewPlane({ planes, ...props }: Props) {
         flex-direction: column-reverse;
         transform: skew(-30deg, 15deg);
         &:hover > div:first-of-type {
-          border: 2px solid red !important;
+          border: 2px solid royalblue !important;
+        }
+        cursor: grab;
+        &:active {
+          cursor: grabbing;
         }
       `}
       {...props}
@@ -40,8 +44,9 @@ export function QuarterViewPlane({ planes, ...props }: Props) {
               key={[y, x, height, width, depth, bgColor, i].join('|')}
               css={css`
                 position: absolute;
-                left: ${(window.innerWidth / 0.5 + y) * RATIO}px;
-                bottom: ${(-(window.innerHeight / 0.5) + x) * RATIO}px;
+                left: ${(window.innerWidth / 0.5 + y) * RATIO - (depth + 10)}px;
+                bottom: ${(-(window.innerHeight / 0.5) + x) * RATIO +
+                (depth + 10)}px;
                 width: ${height * RATIO}px;
                 height: ${width * RATIO}px;
                 background-color: ${bgColor === DEFAULT_DOM_BG
