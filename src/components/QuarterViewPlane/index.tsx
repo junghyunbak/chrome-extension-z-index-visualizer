@@ -18,6 +18,11 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 }
 
 export function QuarterViewPlane({ planes, ...props }: Props) {
+  /**
+   * content_script 에서 정렬해서 주는게 나으려나 어디서하던지 상관은 없는데
+   */
+  planes.sort((a, b) => a.depth - b.depth);
+
   return (
     <div
       css={css`
