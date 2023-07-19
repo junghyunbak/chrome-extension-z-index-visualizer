@@ -2,7 +2,7 @@ import { Model } from '../../contracts/Model';
 import type { Store } from 'webext-redux';
 import type { Plane, PlaneTree } from '@/types/plane';
 import type { AnyAction } from '@reduxjs/toolkit';
-import { updatePlaneTree } from '@/store/slices/content';
+import { updateCurrentHref, updatePlaneTree } from '@/store/slices/content';
 import { Pick } from '@/types/util';
 
 export type State = {
@@ -65,6 +65,7 @@ export class PlaneModel implements Model<State> {
     });
 
     store.dispatch(updatePlaneTree(this.state.planeTree));
+    store.dispatch(updateCurrentHref(window.location.href));
   }
 
   setState(newState: {
