@@ -18,6 +18,13 @@ export interface Plane {
   bgColor: string;
 }
 
+export interface PlaneTree {
+  data: Plane[];
+  child: PlaneTree[];
+  zIndex: number;
+  $root: Element | null;
+}
+
 export type ElementWithDepth = Pick<Plane, '$dom' | 'depth'>;
 
 export type HandlerOfDom = {
