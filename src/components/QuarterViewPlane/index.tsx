@@ -5,11 +5,7 @@ import { css } from '@emotion/react';
 import { color } from '@/assets/style';
 
 import { Plane } from '@/types/plane';
-
-/**
- * 상태로 변경할 예정
- */
-const RATIO = 0.3;
+import { useAppSelector } from '@/hooks/useAppDispatch';
 
 const DEFAULT_DOM_BG = 'rgba(0, 0, 0, 0)';
 
@@ -18,6 +14,8 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 }
 
 export function QuarterViewPlane({ planes, ...props }: Props) {
+  const planeRatio = useAppSelector((state) => state.size.planeRatio);
+
   /**
    * content_script 에서 정렬해서 주는게 나으려나 어디서하던지 상관은 없는데
    */
@@ -49,11 +47,12 @@ export function QuarterViewPlane({ planes, ...props }: Props) {
               key={[y, x, height, width, depth, bgColor, i].join('|')}
               css={css`
                 position: absolute;
-                left: ${(window.innerWidth / 0.5 + y) * RATIO - depth * 3}px;
-                bottom: ${(-(window.innerHeight / 0.5) + x) * RATIO +
+                left: ${(window.innerWidth / 0.5 + y) * planeRatio -
                 depth * 3}px;
-                width: ${height * RATIO}px;
-                height: ${width * RATIO}px;
+                bottom: ${(-(window.innerHeight / 0.5) + x) * planeRatio +
+                depth * 3}px;
+                width: ${height * planeRatio}px;
+                height: ${width * planeRatio}px;
                 background-color: ${bgColor === DEFAULT_DOM_BG
                   ? 'white'
                   : bgColor};

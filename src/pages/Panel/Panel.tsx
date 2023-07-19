@@ -16,8 +16,12 @@ import * as S from './Panel.styles';
 
 import ReactLogo from '@/assets/svg/logo.svg';
 import Fit from '@/assets/svg/fit.svg';
+import Minus from '@/assets/svg/minus.svg';
+import Plus from '@/assets/svg/plus.svg';
 
 import { PlaneTree } from '@/types/plane';
+import { useDispatch } from 'react-redux';
+import { decreasePlaneRatio, increasePlaneRatio } from '@/store/slices/size';
 
 function Panel() {
   const $layout = useRef<HTMLDivElement | null>(null);
@@ -30,6 +34,8 @@ function Panel() {
   const prevPosY = useRef<number>(0);
 
   const planeTree = useAppSelector((state) => state.content.planeTree);
+
+  const dispatch = useDispatch();
 
   useGlobalDrag($drag);
 
@@ -95,6 +101,20 @@ function Panel() {
       <div css={S.controller}>
         <Button onClick={handleFitButtonClick}>
           <Fit />
+        </Button>
+        <Button
+          onClick={() => {
+            dispatch(decreasePlaneRatio());
+          }}
+        >
+          <Minus />
+        </Button>
+        <Button
+          onClick={() => {
+            dispatch(increasePlaneRatio());
+          }}
+        >
+          <Plus />
         </Button>
       </div>
 

@@ -6,6 +6,7 @@ import { logger } from 'redux-logger';
 import { setItemsToChromeStorage } from '@/utils/chrome';
 
 import content from './slices/content';
+import size from './slices/size';
 
 import type { State } from './State';
 
@@ -37,6 +38,7 @@ export const buildOriginStore = ({
 }) => {
   const reducer = combineReducers({
     content,
+    size,
   });
 
   const store = configureStore({
