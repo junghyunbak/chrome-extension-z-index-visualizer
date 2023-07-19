@@ -38,6 +38,10 @@ function Panel() {
       if (e.code === 'Space') {
         isSpacePress.current = true;
       }
+
+      if (e.code === 'Escape') {
+        $target.current = null;
+      }
     };
 
     const handleWindowKeyup = (e: KeyboardEvent) => {
@@ -148,9 +152,10 @@ const Test = ({ planeTree, ...refs }: Props) => {
       ref={wrapper}
       css={css`
         position: relative;
+        z-index: ${planeTree.zIndex};
 
         div:first-of-type > div:first-of-type {
-          border: 1px solid blue;
+          border-style: dashed;
         }
       `}
     >
