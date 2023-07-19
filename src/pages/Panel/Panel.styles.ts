@@ -23,17 +23,15 @@ export const layout = css`
 `;
 
 export const dragWrapper = css`
-  position: absolute;
-
+  position: relative;
+  width: 100%;
   height: 100%;
-
-  transition: transform ease 0.3s;
-
+  /*
   cursor: grab;
-
   &:active {
     cursor: grabbing;
   }
+  */
 `;
 
 export const controller = css`
@@ -45,13 +43,6 @@ export const controller = css`
   align-items: center;
   gap: 0.5rem;
   margin: 0 1rem 1rem 0;
-`;
-
-export const floor = css`
-  position: fixed;
-  inset: 0;
-  background-color: white;
-  transition: filter ease 0.2s;
 `;
 
 export const tile = css`
