@@ -9,15 +9,25 @@ export const useGlobalDrag = (
     let prevPosX = 0;
     let prevPosY = 0;
 
+    const $root = document.querySelector(':root');
+
     const handleWindowKeydown = (e: KeyboardEvent) => {
       if (e.code === 'Space') {
         isSpacePress = true;
+
+        if ($root instanceof HTMLElement) {
+          $root.classList.add('drag');
+        }
       }
     };
 
     const handleWindowKeyup = (e: KeyboardEvent) => {
       if (e.code === 'Space') {
         isSpacePress = false;
+
+        if ($root instanceof HTMLElement) {
+          $root.classList.remove('drag');
+        }
       }
     };
 

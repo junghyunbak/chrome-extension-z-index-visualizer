@@ -15,6 +15,14 @@ export const global = css`
   body {
     margin: 0;
   }
+
+  .drag {
+    cursor: grab;
+  }
+
+  .drag:active {
+    cursor: grabbing;
+  }
 `;
 
 export const layout = css`
@@ -26,12 +34,6 @@ export const dragWrapper = css`
   position: relative;
   width: 100%;
   height: 100%;
-  /*
-  cursor: grab;
-  &:active {
-    cursor: grabbing;
-  }
-  */
 `;
 
 export const controller = css`
