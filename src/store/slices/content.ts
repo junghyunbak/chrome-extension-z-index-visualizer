@@ -1,14 +1,12 @@
-import type { Plane, PlaneTree } from '@/types/plane';
+import type { PlaneTree } from '@/types/plane';
 
 const enum UPDATE_CONTENT {
-  PLANES = 'PLANES',
   PLANE_TREE = 'PLANE_TREE',
   CLICK_LIST = 'CLICK_LIST',
   HREF = 'HREF',
 }
 
 export interface ContentState {
-  planes: Plane[];
   planeTree: PlaneTree;
   clickedList: number[];
   currentHref: string;
@@ -17,13 +15,11 @@ export interface ContentState {
 interface ContentAction {
   type: UPDATE_CONTENT;
   planeTree?: PlaneTree;
-  planes?: Plane[];
   clickedList?: number[];
   currentHref?: string;
 }
 
 const initialState: ContentState = {
-  planes: [],
   planeTree: { data: [], child: [], $root: null, zIndex: 0 },
   clickedList: [],
   currentHref: '',
@@ -34,13 +30,6 @@ const content = (
   action: ContentAction
 ): ContentState => {
   switch (action.type) {
-    case UPDATE_CONTENT.PLANES: {
-      if (!action.planes) {
-        return state;
-      }
-
-      return { ...state, planes: action.planes };
-    }
     case UPDATE_CONTENT.CLICK_LIST: {
       if (!action.clickedList) {
         return state;
@@ -67,16 +56,6 @@ const content = (
     }
   }
 };
-
-export const updatePlanes = (planes: Plane[]) => ({
-  type: UPDATE_CONTENT.PLANES,
-  planes,
-});
-
-export const updateClickedList = (clickedList: number[]) => ({
-  type: UPDATE_CONTENT.CLICK_LIST,
-  clickedList,
-});
 
 export const updateCurrentHref = (currentHref: string) => ({
   type: UPDATE_CONTENT.HREF,
