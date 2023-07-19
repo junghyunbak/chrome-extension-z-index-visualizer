@@ -26,9 +26,8 @@ export function QuarterViewPlane({ planes, ...props }: Props) {
         display: flex;
         flex-direction: column-reverse;
         transform: skew(-30deg, 15deg);
-        &:hover > div:first-child {
-          box-sizing: content-box;
-          border: 5px solid red;
+        &:hover > div:first-of-type {
+          border: 2px solid red !important;
         }
       `}
       {...props}
