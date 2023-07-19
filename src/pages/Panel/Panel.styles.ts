@@ -37,17 +37,6 @@ export const dragWrapper = css`
   height: 100%;
 `;
 
-export const controller = css`
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  z-index: ${zIndex.controller};
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0 1rem 1rem 0;
-`;
-
 export const tile = css`
   position: fixed;
   inset: 0;

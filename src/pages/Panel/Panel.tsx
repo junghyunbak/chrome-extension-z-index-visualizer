@@ -1,5 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import React, { MutableRefObject, useEffect, useRef } from 'react';
+import React, {
+  HTMLAttributes,
+  MutableRefObject,
+  useEffect,
+  useRef,
+} from 'react';
 
 import { useGlobalDrag } from '@/hooks/useGlobalDrag';
 import { useAppSelector } from '@/hooks/useAppDispatch';
@@ -22,6 +27,7 @@ import Plus from '@/assets/svg/plus.svg';
 import { PlaneTree } from '@/types/plane';
 import { useDispatch } from 'react-redux';
 import { decreasePlaneRatio, increasePlaneRatio } from '@/store/slices/size';
+import { zIndex } from '@/assets/style';
 
 function Panel() {
   const $layout = useRef<HTMLDivElement | null>(null);
@@ -108,10 +114,13 @@ function Panel() {
         <h1>Window</h1>
       </div>
 
-      <div css={S.controller}>
+      <ControllerWrapper type={'rightBottom'}>
         <Button onClick={handleFitButtonClick}>
           <Fit />
         </Button>
+      </ControllerWrapper>
+
+      <ControllerWrapper type={'leftBottom'}>
         <Button
           onClick={() => {
             dispatch(decreasePlaneRatio());
@@ -126,7 +135,7 @@ function Panel() {
         >
           <Plus />
         </Button>
-      </div>
+      </ControllerWrapper>
 
       <div ref={$drag} css={S.dragWrapper}>
         <Test
@@ -218,5 +227,45 @@ const Test = ({ planeTree, ...refs }: Props) => {
     </div>
   );
 };
+
+interface ControllerWrapperProps extends HTMLAttributes<HTMLDivElement> {
+  type: 'leftBottom' | 'rightBottom' | 'leftTop' | 'rightTop';
+}
+
+function ControllerWrapper({
+  type,
+  children,
+  ...props
+}: ControllerWrapperProps) {
+  const inset = (() => {
+    switch (type) {
+      case 'leftBottom':
+        return 'auto auto 0 0';
+      case 'leftTop':
+        return '0 auto auto 0';
+      case 'rightBottom':
+        return 'auto 0 0 auto';
+      case 'rightTop':
+        return '0 0 auto auto';
+    }
+  })();
+
+  return (
+    <div
+      css={css`
+        position: absolute;
+        inset: ${inset};
+        z-index: ${zIndex.controller};
+        display: flex;
+        align-items: center;
+        margin: 1rem;
+        gap: 0.5rem;
+      `}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
 
 export default Panel;
