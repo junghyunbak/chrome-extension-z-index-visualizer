@@ -11,7 +11,7 @@ type Size = {
 };
 
 export interface Plane {
-  $dom: Element | Window;
+  $dom: Element;
   depth: number;
   pos: Position;
   size: Size;

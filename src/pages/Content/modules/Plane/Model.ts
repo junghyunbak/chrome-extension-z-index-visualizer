@@ -2,7 +2,12 @@ import { Model } from '../../contracts/Model';
 import type { Store } from 'webext-redux';
 import type { Plane, ElementWithDepth, PlaneTree } from '@/types/plane';
 import type { AnyAction } from '@reduxjs/toolkit';
-import { updatePlanes, updateCurrentHref, updatePlaneTree } from '@/store/slices/content';
+import {
+  updatePlanes,
+  updateCurrentHref,
+  updatePlaneTree,
+} from '@/store/slices/content';
+import { Pick } from '@/types/util';
 
 export type State = {
   store: Store | null;
@@ -45,29 +50,29 @@ export class PlaneModel implements Model<State> {
       return;
     }
 
-    const result: Element[] = [$root];
+    const result: Pick<Plane, '$dom' | 'depth'>[] = [{ $dom: $root, depth: 0 }];
 
-    this.getFixedElement($root, result);
+    this.getFixedElement($root, result, 0);
 
     console.log('fixed element', result);
 
     this.state.planeTree = { data: [], child: [], $root: null, zIndex: 0 };
 
-    result.forEach(($el) => {
+    result.forEach(({ $dom, depth }) => {
       const zIndex = window
-        .getComputedStyle($el, null)
+        .getComputedStyle($dom, null)
         .getPropertyValue('z-index');
 
       const newPlaneNode = {
         data: [],
         child: [],
-        $root: $el,
+        $root: $dom,
         zIndex: zIndex === 'auto' ? 0 : +zIndex,
       };
 
       this.state.planeTree.child.push(newPlaneNode);
 
-      this.makePlaneTree(newPlaneNode, $el);
+      this.makePlaneTree(newPlaneNode, $dom, depth);
     });
 
     store.dispatch(updatePlaneTree(this.state.planeTree));
@@ -85,36 +90,22 @@ export class PlaneModel implements Model<State> {
     return this.state;
   }
 
-  getFixedElement($curEl: Element, result: Element[]) {
+  getFixedElement(
+    $curEl: Element,
+    result: Pick<Plane, '$dom' | 'depth'>[],
+    depth: number
+  ) {
     const position = window
       .getComputedStyle($curEl, null)
       .getPropertyValue('position');
 
     if (position === 'fixed') {
-      result.push($curEl);
+      result.push({ $dom: $curEl, depth });
     }
 
     Array.from($curEl.children).forEach(($nextEl) => {
-      this.getFixedElement($nextEl, result);
+      this.getFixedElement($nextEl, result, depth + 1);
     });
-  }
-
-  getPlaneObject($el: Element): Plane {
-    const { y, x, height, width } = $el.getBoundingClientRect();
-    const bgColor = window
-      .getComputedStyle($el, null)
-      .getPropertyValue('background-color');
-
-    /**
-     * $dom, depth는 임시 값
-     */
-    return {
-      $dom: $el,
-      depth: 0,
-      pos: { y, x },
-      size: { height, width },
-      bgColor,
-    };
   }
 
   isExclude($el: Element): boolean {
@@ -128,15 +119,25 @@ export class PlaneModel implements Model<State> {
     return false;
   }
 
-  makePlaneTree(node: PlaneTree, $curEl: Element) {
+  makePlaneTree(node: PlaneTree, $curEl: Element, depth: number) {
     // 기저 사례
     if (this.isExclude($curEl)) {
       return;
     }
 
-    const plane = this.getPlaneObject($curEl);
+    const { y, x, height, width } = $curEl.getBoundingClientRect();
 
-    node.data.push(plane);
+    const bgColor = window
+      .getComputedStyle($curEl, null)
+      .getPropertyValue('background-color');
+
+    node.data.push({
+      $dom: $curEl,
+      depth,
+      pos: { y, x },
+      size: { height, width },
+      bgColor,
+    });
 
     // 재귀 호출
     Array.from($curEl.children).forEach(($nextEl) => {
@@ -149,7 +150,7 @@ export class PlaneModel implements Model<State> {
           return;
 
         case 'static':
-          this.makePlaneTree(node, $nextEl);
+          this.makePlaneTree(node, $nextEl, depth + 1);
           break;
 
         default:
@@ -166,7 +167,7 @@ export class PlaneModel implements Model<State> {
 
           node.child.push(newPlaneNode);
 
-          this.makePlaneTree(newPlaneNode, $nextEl);
+          this.makePlaneTree(newPlaneNode, $nextEl, depth + 1);
           break;
       }
     });
