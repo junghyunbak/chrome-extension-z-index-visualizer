@@ -40,6 +40,14 @@ function Panel() {
   useGlobalDrag($drag);
 
   useEffect(() => {
+    const handleWindowWheel = (e: WheelEvent) => {
+      if (e.deltaY < 0) {
+        dispatch(increasePlaneRatio());
+      } else {
+        dispatch(decreasePlaneRatio());
+      }
+    };
+
     const handleWindowKeydown = (e: KeyboardEvent) => {
       if (e.code === 'Space') {
         isSpacePress.current = true;
@@ -56,10 +64,12 @@ function Panel() {
       }
     };
 
+    window.addEventListener('wheel', handleWindowWheel);
     window.addEventListener('keydown', handleWindowKeydown);
     window.addEventListener('keyup', handleWindowKeyup);
 
     return () => {
+      window.removeEventListener('wheel', handleWindowWheel);
       window.removeEventListener('keydown', handleWindowKeydown);
       window.removeEventListener('keyup', handleWindowKeyup);
     };
