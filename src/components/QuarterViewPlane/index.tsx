@@ -44,9 +44,9 @@ export function QuarterViewPlane({ planes, ...props }: Props) {
               key={[y, x, height, width, depth, bgColor, i].join('|')}
               css={css`
                 position: absolute;
-                left: ${(window.innerWidth / 0.5 + y) * RATIO - (depth + 10)}px;
+                left: ${(window.innerWidth / 0.5 + y) * RATIO - depth * 3}px;
                 bottom: ${(-(window.innerHeight / 0.5) + x) * RATIO +
-                (depth + 10)}px;
+                depth * 3}px;
                 width: ${height * RATIO}px;
                 height: ${width * RATIO}px;
                 background-color: ${bgColor === DEFAULT_DOM_BG
