@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import React, { MutableRefObject, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { useGlobalDrag } from '@/hooks/useGlobalDrag';
 import { useAppSelector } from '@/hooks/useAppDispatch';
@@ -12,19 +11,17 @@ import { setElementDefaultScale, setElementTopLeftPosition } from '@/utils/dom';
 import { QuarterViewPlane } from '@/components/QuarterViewPlane';
 import { Button } from '@/components/Button';
 import { Address } from '@/components/Address';
-import { ControllerWrapper } from '@/components/ControllerWrapper';
+import { ControllerWrapper } from '@/components/Controller/ControllerWrapper';
+import { ControllerZoomInOut } from '@/components/Controller/ControllerZoomInOut';
 
 import * as S from './Panel.styles';
 
 import ReactLogo from '@/assets/svg/logo.svg';
 import Fit from '@/assets/svg/fit.svg';
-import Minus from '@/assets/svg/minus.svg';
-import Plus from '@/assets/svg/plus.svg';
+
 import Refresh from '@/assets/svg/refresh.svg';
 
 import { PlaneTree } from '@/types/plane';
-
-import { decreasePlaneRatio, increasePlaneRatio } from '@/store/slices/size';
 
 import { MESSAGE_TYPE } from '@/constants';
 
@@ -40,19 +37,9 @@ function Panel() {
 
   const planeTree = useAppSelector((state) => state.content.planeTree);
 
-  const dispatch = useDispatch();
-
   useGlobalDrag($drag);
 
   useEffect(() => {
-    const handleWindowWheel = (e: WheelEvent) => {
-      if (e.deltaY < 0) {
-        dispatch(increasePlaneRatio());
-      } else {
-        dispatch(decreasePlaneRatio());
-      }
-    };
-
     const handleWindowKeydown = (e: KeyboardEvent) => {
       if (e.code === 'Space') {
         isSpacePress.current = true;
@@ -69,12 +56,10 @@ function Panel() {
       }
     };
 
-    window.addEventListener('wheel', handleWindowWheel);
     window.addEventListener('keydown', handleWindowKeydown);
     window.addEventListener('keyup', handleWindowKeyup);
 
     return () => {
-      window.removeEventListener('wheel', handleWindowWheel);
       window.removeEventListener('keydown', handleWindowKeydown);
       window.removeEventListener('keyup', handleWindowKeyup);
     };
@@ -135,23 +120,7 @@ function Panel() {
           <Refresh />
         </Button>
       </ControllerWrapper>
-
-      <ControllerWrapper type={'leftBottom'}>
-        <Button
-          onClick={() => {
-            dispatch(decreasePlaneRatio());
-          }}
-        >
-          <Minus />
-        </Button>
-        <Button
-          onClick={() => {
-            dispatch(increasePlaneRatio());
-          }}
-        >
-          <Plus />
-        </Button>
-      </ControllerWrapper>
+      <ControllerZoomInOut />
 
       <div ref={$drag} css={S.dragWrapper}>
         <Test
