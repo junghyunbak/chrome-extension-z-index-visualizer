@@ -6,24 +6,16 @@ import { useAppSelector } from '@/hooks/useAppDispatch';
 
 import { css, Global } from '@emotion/react';
 
-import { setElementDefaultScale, setElementTopLeftPosition } from '@/utils/dom';
-
 import { QuarterViewPlane } from '@/components/QuarterViewPlane';
-import { Button } from '@/components/Button';
 import { Address } from '@/components/Address';
-import { ControllerWrapper } from '@/components/Controller/ControllerWrapper';
 import { ControllerZoomInOut } from '@/components/Controller/ControllerZoomInOut';
+import { ControllerInitializer } from '@/components/Controller/ControllerInitializer';
 
 import * as S from './Panel.styles';
 
 import ReactLogo from '@/assets/svg/logo.svg';
-import Fit from '@/assets/svg/fit.svg';
-
-import Refresh from '@/assets/svg/refresh.svg';
 
 import { PlaneTree } from '@/types/plane';
-
-import { MESSAGE_TYPE } from '@/constants';
 
 function Panel() {
   const $layout = useRef<HTMLDivElement | null>(null);
@@ -65,11 +57,6 @@ function Panel() {
     };
   }, []);
 
-  const handleFitButtonClick = () => {
-    setElementTopLeftPosition($drag.current);
-    setElementDefaultScale($drag.current);
-  };
-
   const handleLayoutMouseMove: React.MouseEventHandler<HTMLDivElement> = (
     e
   ) => {
@@ -87,20 +74,6 @@ function Panel() {
     $target.current.style.top = `${$target.current.offsetTop - posY}px`;
   };
 
-  const handleRefreshButtonClick = () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const [tab, ..._] = tabs;
-
-      if (!tab || !tab.id) {
-        return;
-      }
-
-      chrome.tabs.sendMessage(tab.id, {
-        type: MESSAGE_TYPE.REQUEST_REFRESH_DATA,
-      });
-    });
-  };
-
   return (
     <div ref={$layout} css={S.layout} onMouseMove={handleLayoutMouseMove}>
       <Global styles={S.global} />
@@ -112,14 +85,7 @@ function Panel() {
         <h1>Window</h1>
       </div>
 
-      <ControllerWrapper type={'rightBottom'}>
-        <Button onClick={handleFitButtonClick}>
-          <Fit />
-        </Button>
-        <Button onClick={handleRefreshButtonClick}>
-          <Refresh />
-        </Button>
-      </ControllerWrapper>
+      <ControllerInitializer $target={$drag} />
       <ControllerZoomInOut />
 
       <div ref={$drag} css={S.dragWrapper}>
