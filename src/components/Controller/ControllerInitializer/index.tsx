@@ -1,19 +1,20 @@
 import React, { MutableRefObject } from 'react';
 import { ControllerWrapper } from '@/components/Controller/ControllerWrapper';
-import { setElementDefaultScale, setElementTopLeftPosition } from '@/utils/dom';
+import { setElementTopLeftPosition } from '@/utils/dom';
 import { Button } from '@/components/Button';
 import { MESSAGE_TYPE } from '@/constants';
 import Fit from '@/assets/svg/fit.svg';
 import Refresh from '@/assets/svg/refresh.svg';
 
 interface Props {
-  $target: MutableRefObject<HTMLDivElement | null>;
+  $dragElements: MutableRefObject<MutableRefObject<HTMLDivElement | null>[]>;
 }
 
-export function ControllerInitializer({ $target }: Props) {
+export function ControllerInitializer({ $dragElements }: Props) {
   const handleFitButtonClick = () => {
-    setElementTopLeftPosition($target.current);
-    setElementDefaultScale($target.current);
+    $dragElements.current.forEach(($drag) => {
+      setElementTopLeftPosition($drag.current);
+    });
   };
 
   const handleRefreshButtonClick = () => {

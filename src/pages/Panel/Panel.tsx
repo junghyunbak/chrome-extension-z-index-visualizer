@@ -18,9 +18,13 @@ import ReactLogo from '@/assets/svg/logo.svg';
 import { PlaneTree } from '@/types/plane';
 
 function Panel() {
+  const $dragElements = useRef<MutableRefObject<HTMLDivElement | null>[]>([]);
+
   const $layout = useRef<HTMLDivElement | null>(null);
   const $drag = useRef<HTMLDivElement | null>(null);
   const $target = useRef<HTMLElement | null>(null);
+
+  $dragElements.current = [$drag];
 
   const isSpacePress = useRef<boolean>(false);
   const isMousePress = useRef<boolean>(false);
@@ -85,7 +89,7 @@ function Panel() {
         <h1>Window</h1>
       </div>
 
-      <ControllerInitializer $target={$drag} />
+      <ControllerInitializer $dragElements={$dragElements} />
       <ControllerZoomInOut />
 
       <div ref={$drag} css={S.dragWrapper}>
@@ -95,6 +99,7 @@ function Panel() {
           prevPosY={prevPosY}
           $target={$target}
           isMousePress={isMousePress}
+          $dragElements={$dragElements}
         />
       </div>
     </div>
@@ -111,12 +116,15 @@ interface Props {
   prevPosY: MutableRefObject<number>;
   isMousePress: MutableRefObject<boolean>;
   $target: MutableRefObject<HTMLElement | null>;
+  $dragElements: MutableRefObject<MutableRefObject<HTMLDivElement | null>[]>;
 }
 
 const Test = ({ planeTree, ...refs }: Props) => {
-  const { prevPosX, prevPosY, isMousePress, $target } = refs;
+  const { prevPosX, prevPosY, isMousePress, $target, $dragElements } = refs;
 
   const wrapper = useRef<HTMLDivElement | null>(null);
+
+  $dragElements.current.push(wrapper);
 
   const handleDragElementMouseDown: React.MouseEventHandler<HTMLDivElement> = (
     e
