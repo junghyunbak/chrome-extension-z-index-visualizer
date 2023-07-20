@@ -3,8 +3,14 @@ export const setElementTopLeftPosition = ($target: HTMLElement | null) => {
     return;
   }
 
+  $target.style.transition = 'inset ease 0.5s';
+
   $target.style.top = '0px';
   $target.style.left = '0px';
+
+  setTimeout(() => {
+    $target.style.transition = '';
+  }, 500);
 };
 
 export const setElementDefaultScale = ($target: HTMLElement | null) => {
