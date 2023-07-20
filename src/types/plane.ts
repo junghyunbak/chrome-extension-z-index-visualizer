@@ -1,5 +1,3 @@
-import type { Pick } from './util';
-
 type Position = {
   y: number;
   x: number;
@@ -24,10 +22,3 @@ export interface PlaneTree {
   zIndex: number;
   $root: Element | null;
 }
-
-export type ElementWithDepth = Pick<Plane, '$dom' | 'depth'>;
-
-export type HandlerOfDom = {
-  $dom: Element | Window;
-  handler: () => void;
-};
