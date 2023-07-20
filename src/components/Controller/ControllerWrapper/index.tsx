@@ -25,7 +25,7 @@ export function ControllerWrapper({ type, children, ...props }: Props) {
   return (
     <div
       css={css`
-        position: absolute;
+        position: fixed;
         inset: ${inset};
         z-index: ${zIndex.controller};
         display: flex;
