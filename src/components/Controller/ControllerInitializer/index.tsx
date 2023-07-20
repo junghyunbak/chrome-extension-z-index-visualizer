@@ -17,17 +17,25 @@ export function ControllerInitializer({ $target }: Props) {
   };
 
   const handleRefreshButtonClick = () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const [tab, ..._] = tabs;
+    try {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const [tab, ..._] = tabs;
 
-      if (!tab || !tab.id) {
-        return;
-      }
+        if (!tab || !tab.id) {
+          return;
+        }
 
-      chrome.tabs.sendMessage(tab.id, {
-        type: MESSAGE_TYPE.REQUEST_REFRESH_DATA,
+        chrome.tabs.sendMessage(tab.id, {
+          type: MESSAGE_TYPE.REQUEST_REFRESH_DATA,
+        });
       });
-    });
+    } catch (e) {
+      /**
+       * TODO: Extension context invalidated 에러 발생 시 적절한 처리가 필요.
+       * 개발 모드에서만 발생하는 오류인지는 모르겠음.
+       */
+      console.error(e);
+    }
   };
 
   return (
