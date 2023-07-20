@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useGlobalDrag } from '@/hooks/useGlobalDrag';
 import { useAppSelector } from '@/hooks/useAppDispatch';
@@ -23,11 +24,14 @@ import ReactLogo from '@/assets/svg/logo.svg';
 import Fit from '@/assets/svg/fit.svg';
 import Minus from '@/assets/svg/minus.svg';
 import Plus from '@/assets/svg/plus.svg';
+import Refresh from '@/assets/svg/refresh.svg';
+import { zIndex } from '@/assets/style';
 
 import { PlaneTree } from '@/types/plane';
-import { useDispatch } from 'react-redux';
+
 import { decreasePlaneRatio, increasePlaneRatio } from '@/store/slices/size';
-import { zIndex } from '@/assets/style';
+
+import { MESSAGE_TYPE } from '@/constants';
 
 function Panel() {
   const $layout = useRef<HTMLDivElement | null>(null);
@@ -103,6 +107,20 @@ function Panel() {
     $target.current.style.top = `${$target.current.offsetTop - posY}px`;
   };
 
+  const handleRefreshButtonClick = () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const [tab, ..._] = tabs;
+
+      if (!tab || !tab.id) {
+        return;
+      }
+
+      chrome.tabs.sendMessage(tab.id, {
+        type: MESSAGE_TYPE.REQUEST_REFRESH_DATA,
+      });
+    });
+  };
+
   return (
     <div ref={$layout} css={S.layout} onMouseMove={handleLayoutMouseMove}>
       <Global styles={S.global} />
@@ -117,6 +135,9 @@ function Panel() {
       <ControllerWrapper type={'rightBottom'}>
         <Button onClick={handleFitButtonClick}>
           <Fit />
+        </Button>
+        <Button onClick={handleRefreshButtonClick}>
+          <Refresh />
         </Button>
       </ControllerWrapper>
 
