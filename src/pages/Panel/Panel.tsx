@@ -1,10 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, {
-  HTMLAttributes,
-  MutableRefObject,
-  useEffect,
-  useRef,
-} from 'react';
+import React, { MutableRefObject, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useGlobalDrag } from '@/hooks/useGlobalDrag';
@@ -17,6 +12,7 @@ import { setElementDefaultScale, setElementTopLeftPosition } from '@/utils/dom';
 import { QuarterViewPlane } from '@/components/QuarterViewPlane';
 import { Button } from '@/components/Button';
 import { Address } from '@/components/Address';
+import { ControllerWrapper } from '@/components/ControllerWrapper';
 
 import * as S from './Panel.styles';
 
@@ -25,7 +21,6 @@ import Fit from '@/assets/svg/fit.svg';
 import Minus from '@/assets/svg/minus.svg';
 import Plus from '@/assets/svg/plus.svg';
 import Refresh from '@/assets/svg/refresh.svg';
-import { zIndex } from '@/assets/style';
 
 import { PlaneTree } from '@/types/plane';
 
@@ -248,45 +243,5 @@ const Test = ({ planeTree, ...refs }: Props) => {
     </div>
   );
 };
-
-interface ControllerWrapperProps extends HTMLAttributes<HTMLDivElement> {
-  type: 'leftBottom' | 'rightBottom' | 'leftTop' | 'rightTop';
-}
-
-function ControllerWrapper({
-  type,
-  children,
-  ...props
-}: ControllerWrapperProps) {
-  const inset = (() => {
-    switch (type) {
-      case 'leftBottom':
-        return 'auto auto 0 0';
-      case 'leftTop':
-        return '0 auto auto 0';
-      case 'rightBottom':
-        return 'auto 0 0 auto';
-      case 'rightTop':
-        return '0 0 auto auto';
-    }
-  })();
-
-  return (
-    <div
-      css={css`
-        position: absolute;
-        inset: ${inset};
-        z-index: ${zIndex.controller};
-        display: flex;
-        align-items: center;
-        margin: 1rem;
-        gap: 0.5rem;
-      `}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-}
 
 export default Panel;
