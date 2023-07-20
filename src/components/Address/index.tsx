@@ -97,7 +97,7 @@ export function Address() {
             <td>
               {!isSameUrl() ? (
                 <p>
-                  <StateBullet type={'orange'} /> A page refresh is required.
+                  <StateBullet type={'orange'} /> Press the refresh button
                 </p>
               ) : (
                 <p>
