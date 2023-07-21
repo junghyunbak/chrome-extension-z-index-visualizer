@@ -18,13 +18,12 @@ import ReactLogo from '@/assets/svg/logo.svg';
 import { PlaneTree } from '@/types/plane';
 
 function Panel() {
-  const $dragElements = useRef<MutableRefObject<HTMLDivElement | null>[]>([]);
-
   const $layout = useRef<HTMLDivElement | null>(null);
   const $drag = useRef<HTMLDivElement | null>(null);
   const $target = useRef<HTMLElement | null>(null);
-
-  $dragElements.current = [$drag];
+  const $dragElements = useRef<MutableRefObject<HTMLDivElement | null>[]>([
+    $drag,
+  ]);
 
   const isSpacePress = useRef<boolean>(false);
   const isMousePress = useRef<boolean>(false);
@@ -33,8 +32,31 @@ function Panel() {
 
   const planeTree = useAppSelector((state) => state.content.planeTree);
 
+  /**
+   * 요소 전체 드래그
+   */
   useGlobalDrag($drag);
 
+  const handleLayoutMouseMove: React.MouseEventHandler<HTMLDivElement> = (
+    e
+  ) => {
+    if (!$target.current || !isMousePress || isSpacePress.current) {
+      return;
+    }
+
+    const posX = prevPosX.current - e.clientX;
+    const posY = prevPosY.current - e.clientY;
+
+    prevPosX.current = e.clientX;
+    prevPosY.current = e.clientY;
+
+    $target.current.style.left = `${$target.current.offsetLeft - posX}px`;
+    $target.current.style.top = `${$target.current.offsetTop - posY}px`;
+  };
+
+  /**
+   * 일부 요소 드래그
+   */
   useEffect(() => {
     const handleWindowKeydown = (e: KeyboardEvent) => {
       if (e.code === 'Space') {
@@ -61,21 +83,71 @@ function Panel() {
     };
   }, []);
 
-  const handleLayoutMouseMove: React.MouseEventHandler<HTMLDivElement> = (
-    e
-  ) => {
-    if (!$target.current || !isMousePress || isSpacePress.current) {
-      return;
-    }
+  const NestedDraggablePlaneElement = ({
+    planeTree,
+  }: {
+    planeTree: PlaneTree;
+  }) => {
+    const wrapper = useRef<HTMLDivElement | null>(null);
 
-    const posX = prevPosX.current - e.clientX;
-    const posY = prevPosY.current - e.clientY;
+    $dragElements.current.push(wrapper);
 
-    prevPosX.current = e.clientX;
-    prevPosY.current = e.clientY;
+    const handleDragElementMouseDown: React.MouseEventHandler<
+      HTMLDivElement
+    > = (e) => {
+      prevPosX.current = e.clientX;
+      prevPosY.current = e.clientY;
 
-    $target.current.style.left = `${$target.current.offsetLeft - posX}px`;
-    $target.current.style.top = `${$target.current.offsetTop - posY}px`;
+      isMousePress.current = true;
+
+      $target.current = wrapper.current;
+    };
+
+    const handleDragElementMouseUp: React.MouseEventHandler<
+      HTMLDivElement
+    > = () => {
+      isMousePress.current = false;
+
+      $target.current = null;
+    };
+
+    return (
+      <div
+        ref={wrapper}
+        css={css`
+          position: relative;
+          z-index: ${planeTree.zIndex};
+
+          // hover 버블링을 이용하여 특정 요소가 hover 되었을 때
+          // 모든 상위(부모)요소를 강조
+          &:hover {
+            > div:first-of-type > div:first-of-type {
+              border: 2px solid crimson;
+
+              &::after {
+                display: block;
+                position: absolute;
+                bottom: -1rem;
+                right: 0;
+                content: '${planeTree.zIndex === 0
+                  ? 'auto'
+                  : planeTree.zIndex}';
+              }
+            }
+          }
+        `}
+      >
+        <QuarterViewPlane
+          planes={planeTree.data}
+          onMouseDown={handleDragElementMouseDown}
+          onMouseUp={handleDragElementMouseUp}
+        />
+
+        {planeTree.child.map((v) => {
+          return <NestedDraggablePlaneElement planeTree={v} />;
+        })}
+      </div>
+    );
   };
 
   return (
@@ -93,98 +165,10 @@ function Panel() {
       <ControllerZoomInOut />
 
       <div ref={$drag} css={S.dragWrapper}>
-        <Test
-          planeTree={planeTree}
-          prevPosX={prevPosX}
-          prevPosY={prevPosY}
-          $target={$target}
-          isMousePress={isMousePress}
-          $dragElements={$dragElements}
-        />
+        <NestedDraggablePlaneElement planeTree={planeTree} />
       </div>
     </div>
   );
 }
-
-/**
- * TODO: PlaneTree 타입 명 개선 후 컴포넌트 함수 명 변경
- */
-
-interface Props {
-  planeTree: PlaneTree;
-  prevPosX: MutableRefObject<number>;
-  prevPosY: MutableRefObject<number>;
-  isMousePress: MutableRefObject<boolean>;
-  $target: MutableRefObject<HTMLElement | null>;
-  $dragElements: MutableRefObject<MutableRefObject<HTMLDivElement | null>[]>;
-}
-
-const Test = ({ planeTree, ...refs }: Props) => {
-  const { prevPosX, prevPosY, isMousePress, $target, $dragElements } = refs;
-
-  const wrapper = useRef<HTMLDivElement | null>(null);
-
-  $dragElements.current.push(wrapper);
-
-  const handleDragElementMouseDown: React.MouseEventHandler<HTMLDivElement> = (
-    e
-  ) => {
-    prevPosX.current = e.clientX;
-    prevPosY.current = e.clientY;
-
-    isMousePress.current = true;
-
-    $target.current = wrapper.current;
-  };
-
-  const handleDragElementMouseUp: React.MouseEventHandler<
-    HTMLDivElement
-  > = () => {
-    isMousePress.current = false;
-
-    $target.current = null;
-  };
-
-  return (
-    <div
-      ref={wrapper}
-      css={css`
-        position: relative;
-        z-index: ${planeTree.zIndex};
-
-        div:first-of-type > div:first-of-type {
-          overflow: hidden;
-          &::before {
-            content: '';
-            opacity: 0.5;
-            display: block;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-              45deg,
-              lightgray 25%,
-              white 0,
-              white 50%,
-              lightgray 0,
-              lightgray 75%,
-              white 0
-            );
-            background-size: 20px 20px;
-          }
-        }
-      `}
-    >
-      <QuarterViewPlane
-        planes={planeTree.data}
-        onMouseDown={handleDragElementMouseDown}
-        onMouseUp={handleDragElementMouseUp}
-      />
-
-      {planeTree.child.map((v) => {
-        return <Test planeTree={v} {...refs} />;
-      })}
-    </div>
-  );
-};
 
 export default Panel;

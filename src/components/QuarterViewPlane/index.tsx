@@ -16,9 +16,6 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 export function QuarterViewPlane({ planes, ...props }: Props) {
   const planeRatio = useAppSelector((state) => state.size.planeRatio);
 
-  /**
-   * content_script 에서 정렬해서 주는게 나으려나 어디서하던지 상관은 없는데
-   */
   planes.sort((a, b) => a.depth - b.depth);
 
   return (
@@ -29,12 +26,34 @@ export function QuarterViewPlane({ planes, ...props }: Props) {
         display: flex;
         flex-direction: column-reverse;
         transform: skew(-30deg, 15deg);
+
         &:hover > div:first-of-type {
           border: 2px solid royalblue !important;
         }
+
         cursor: grab;
         &:active {
           cursor: grabbing;
+        }
+
+        > div:first-of-type {
+          &::before {
+            content: '';
+            opacity: 0.5;
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+              45deg,
+              lightgray 25%,
+              white 0,
+              white 50%,
+              lightgray 0,
+              lightgray 75%,
+              white 0
+            );
+            background-size: 20px 20px;
+          }
         }
       `}
       {...props}
@@ -43,7 +62,6 @@ export function QuarterViewPlane({ planes, ...props }: Props) {
         ({ pos: { y, x }, size: { height, width }, depth, bgColor }, i) => {
           return (
             <div
-              data-line={i}
               key={[y, x, height, width, depth, bgColor, i].join('|')}
               css={css`
                 position: absolute;
