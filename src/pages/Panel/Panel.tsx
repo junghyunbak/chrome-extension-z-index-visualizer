@@ -10,10 +10,9 @@ import { QuarterViewPlane } from '@/components/QuarterViewPlane';
 import { Address } from '@/components/Address';
 import { ControllerZoomInOut } from '@/components/Controller/ControllerZoomInOut';
 import { ControllerInitializer } from '@/components/Controller/ControllerInitializer';
+import { Tile } from '@/components/Tile';
 
 import * as S from './Panel.styles';
-
-import ReactLogo from '@/assets/svg/logo.svg';
 
 import { PlaneTree } from '@/types/plane';
 
@@ -153,17 +152,10 @@ function Panel() {
   return (
     <div ref={$layout} css={S.layout} onMouseMove={handleLayoutMouseMove}>
       <Global styles={S.global} />
-
       <Address />
-
-      <div css={S.tile}>
-        <ReactLogo />
-        <h1>Window</h1>
-      </div>
-
+      <Tile />
       <ControllerInitializer $dragElements={$dragElements} />
       <ControllerZoomInOut />
-
       <div ref={$drag} css={S.dragWrapper}>
         <NestedDraggablePlaneElement planeTree={planeTree} />
       </div>

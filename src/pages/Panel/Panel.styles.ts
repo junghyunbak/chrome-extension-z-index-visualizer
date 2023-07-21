@@ -43,18 +43,3 @@ export const dragWrapper = css`
   width: 100%;
   height: 100%;
 `;
-
-export const tile = css`
-  position: fixed;
-  inset: 0;
-  transform: skew(-30deg, 15deg) scale(0.5);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  h1 {
-    color: #61dafb;
-    user-select: none;
-  }
-`;
