@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "DOM Click Visualizer",
-  "description": "개발자도구 패널에서 DOM 요소에 클릭 이벤트가 발생했을 때, 버블링되는 요소를 시각적으로 확인할 수 있습니다.",
+  "name": "Z-index Visualizer",
+  "description": "A tool that visualizes (2.5D) the stacking contexts of web pages.",
   "background": { "service_worker": "background.bundle.js" },
   "version": "1.0.0",
   "action": {
