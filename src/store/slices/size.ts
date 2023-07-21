@@ -24,7 +24,7 @@ const content = (
     case UPDATE_SIZE.DECREASE_PLANE_RATIO: {
       const { planeRatio } = state;
 
-      const nextPlaneRatio = planeRatio - 0.05;
+      const nextPlaneRatio = Math.round((planeRatio - 0.05) * 100) / 100;
 
       if (nextPlaneRatio < 0.1) {
         return state;
@@ -35,7 +35,7 @@ const content = (
     case UPDATE_SIZE.INCREASE_PLANE_RATIO: {
       const { planeRatio } = state;
 
-      const nextPlaneRatio = planeRatio + 0.05;
+      const nextPlaneRatio = Math.round((planeRatio + 0.05) * 100) / 100;
 
       if (nextPlaneRatio > 1) {
         return state;
