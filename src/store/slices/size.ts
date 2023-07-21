@@ -13,7 +13,7 @@ interface SizeAction {
 }
 
 const initialState: SizeState = {
-  planeRatio: 0.5,
+  planeRatio: 0.35,
 };
 
 const content = (
