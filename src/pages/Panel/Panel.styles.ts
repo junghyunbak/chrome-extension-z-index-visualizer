@@ -18,7 +18,14 @@ export const global = css`
 
   .drag {
     cursor: grab;
-    border: 2px solid royalblue;
+    &::before {
+      content: '';
+      display: block;
+      position: fixed;
+      inset: 0;
+      border: 2px solid royalblue;
+      z-index: ${zIndex.DraggableBorder};
+    }
   }
 
   .drag:active {
