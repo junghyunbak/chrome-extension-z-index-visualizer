@@ -1,160 +1,17 @@
 /** @jsxImportSource @emotion/react */
-import React, { MutableRefObject, useEffect, useRef } from 'react';
-
-import { useGlobalDrag } from '@/hooks/useGlobalDrag';
-import { useAppSelector } from '@/hooks/useAppDispatch';
-
-import { css } from '@emotion/react';
-
+import React, { useRef } from 'react';
+import type { MutableRefObject } from 'react';
 import { QuarterViewPlane } from '@/components/QuarterViewPlane';
+import { DragElementsContext } from '@/contexts/DragElements';
 import { Address } from '@/components/Address';
 import { Tile } from '@/components/Tile';
-
-import { PlaneTree } from '@/types/plane';
 import { Controller } from '@/components/Controller';
 
 function Panel() {
-  const $layout = useRef<HTMLDivElement | null>(null);
-  const $drag = useRef<HTMLDivElement | null>(null);
-  const $target = useRef<HTMLElement | null>(null);
-  const $dragElements = useRef<MutableRefObject<HTMLDivElement | null>[]>([
-    $drag,
-  ]);
-
-  const isSpacePress = useRef<boolean>(false);
-  const isMousePress = useRef<boolean>(false);
-  const prevPosX = useRef<number>(0);
-  const prevPosY = useRef<number>(0);
-
-  const planeTree = useAppSelector((state) => state.content.planeTree);
-
-  /**
-   * 요소 전체 드래그
-   */
-  useGlobalDrag($drag);
-
-  const handleLayoutMouseMove: React.MouseEventHandler<HTMLDivElement> = (
-    e
-  ) => {
-    if (!$target.current || !isMousePress || isSpacePress.current) {
-      return;
-    }
-
-    const posX = prevPosX.current - e.clientX;
-    const posY = prevPosY.current - e.clientY;
-
-    prevPosX.current = e.clientX;
-    prevPosY.current = e.clientY;
-
-    $target.current.style.left = `${$target.current.offsetLeft - posX}px`;
-    $target.current.style.top = `${$target.current.offsetTop - posY}px`;
-  };
-
-  /**
-   * 일부 요소 드래그
-   */
-  useEffect(() => {
-    const handleWindowKeydown = (e: KeyboardEvent) => {
-      if (e.code === 'Space') {
-        isSpacePress.current = true;
-      }
-
-      if (e.code === 'Escape') {
-        $target.current = null;
-      }
-    };
-
-    const handleWindowKeyup = (e: KeyboardEvent) => {
-      if (e.code === 'Space') {
-        isSpacePress.current = false;
-      }
-    };
-
-    window.addEventListener('keydown', handleWindowKeydown);
-    window.addEventListener('keyup', handleWindowKeyup);
-
-    return () => {
-      window.removeEventListener('keydown', handleWindowKeydown);
-      window.removeEventListener('keyup', handleWindowKeyup);
-    };
-  }, []);
-
-  const NestedDraggablePlaneElement = ({
-    planeTree,
-  }: {
-    planeTree: PlaneTree;
-  }) => {
-    const wrapper = useRef<HTMLDivElement | null>(null);
-
-    $dragElements.current.push(wrapper);
-
-    const handleDragElementMouseDown: React.MouseEventHandler<
-      HTMLDivElement
-    > = (e) => {
-      prevPosX.current = e.clientX;
-      prevPosY.current = e.clientY;
-
-      isMousePress.current = true;
-
-      $target.current = wrapper.current;
-    };
-
-    const handleDragElementMouseUp: React.MouseEventHandler<
-      HTMLDivElement
-    > = () => {
-      isMousePress.current = false;
-
-      $target.current = null;
-    };
-
-    return (
-      <div
-        ref={wrapper}
-        css={css`
-          position: relative;
-          z-index: ${planeTree.zIndex};
-
-          // hover 버블링을 이용하여 특정 요소가 hover 되었을 때
-          // 모든 상위(부모)요소를 강조
-          &:hover {
-            > div:first-of-type > div:first-of-type {
-              border: 2px solid crimson;
-
-              &::after {
-                display: block;
-                position: absolute;
-                bottom: -1rem;
-                right: 0;
-                content: '${planeTree.zIndex === 0
-                  ? 'auto'
-                  : planeTree.zIndex}';
-              }
-            }
-          }
-        `}
-      >
-        <QuarterViewPlane
-          planes={planeTree.data}
-          onMouseDown={handleDragElementMouseDown}
-          onMouseUp={handleDragElementMouseUp}
-        />
-
-        {planeTree.child.map((v) => {
-          return <NestedDraggablePlaneElement planeTree={v} />;
-        })}
-      </div>
-    );
-  };
+  const $dragElements = useRef<MutableRefObject<HTMLDivElement | null>[]>([]);
 
   return (
-    <div
-      css={css`
-        position: fixed;
-        inset: 0;
-      `}
-      ref={$layout}
-      onMouseMove={handleLayoutMouseMove}
-    >
+    <DragElementsContext.Provider value={$dragElements}>
       <Address />
 
       <Tile />
@@ -167,17 +24,8 @@ function Panel() {
         <Controller.ZoomInOut />
       </Controller>
 
-      <div
-        css={css`
-          position: relative;
-          width: 100%;
-          height: 100%;
-        `}
-        ref={$drag}
-      >
-        <NestedDraggablePlaneElement planeTree={planeTree} />
-      </div>
-    </div>
+      <QuarterViewPlane />
+    </DragElementsContext.Provider>
   );
 }
 

@@ -1,87 +1,112 @@
 /** @jsxImportSource @emotion/react */
-import React, { HTMLAttributes } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 import { css } from '@emotion/react';
-
-import { color } from '@/assets/style';
-
-import { Plane } from '@/types/plane';
+import { DragContext } from '@/contexts/Drag';
+import { DragElementsContext } from '@/contexts/DragElements';
+import { StackingContext } from './StackingContext';
+import { useGlobalDrag } from '@/hooks/useGlobalDrag';
 import { useAppSelector } from '@/hooks/useAppDispatch';
 
-const DEFAULT_DOM_BG = 'rgba(0, 0, 0, 0)';
+export function QuarterViewPlane() {
+  const $layout = useRef<HTMLDivElement | null>(null);
+  const $drag = useRef<HTMLDivElement | null>(null);
+  const $target = useRef<HTMLElement | null>(null);
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
-  planes: Plane[];
-}
+  const isSpacePress = useRef<boolean>(false);
+  const isMousePress = useRef<boolean>(false);
 
-export function QuarterViewPlane({ planes, ...props }: Props) {
-  const planeRatio = useAppSelector((state) => state.size.planeRatio);
+  const prevPosX = useRef<number>(0);
+  const prevPosY = useRef<number>(0);
 
-  planes.sort((a, b) => a.depth - b.depth);
+  const planeTree = useAppSelector((state) => state.content.planeTree);
+
+  const $dragElements = useContext(DragElementsContext);
+
+  $dragElements?.current.push($drag);
+
+  /**
+   * 전체 요소 드래그
+   */
+  useGlobalDrag($drag);
+
+  /**
+   * 스페이스바의 눌림을 감지하는 코드.
+   * 스페이스바를 누른 상태로는 전체 요소가 드래그 되고, 개별 요소는 제자리에 있어야 하므로 이를 식별하기 위함.
+   */
+  useEffect(() => {
+    const handleWindowKeydown = (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        isSpacePress.current = true;
+      }
+
+      if (e.code === 'Escape') {
+        $target.current = null;
+      }
+    };
+
+    const handleWindowKeyup = (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        isSpacePress.current = false;
+      }
+    };
+
+    window.addEventListener('keydown', handleWindowKeydown);
+    window.addEventListener('keyup', handleWindowKeyup);
+
+    return () => {
+      window.removeEventListener('keydown', handleWindowKeydown);
+      window.removeEventListener('keyup', handleWindowKeyup);
+    };
+  }, []);
+
+  /**
+   * QuarterView 영역 위에서 마우스가 움직일 때 발생하는 이벤트
+   * 움직일 요소($target)가 설정되어 있는 상태라면 위치를 갱신함.
+   */
+  const handleLayoutMouseMove: React.MouseEventHandler<HTMLDivElement> = (
+    e
+  ) => {
+    if (!$target.current || !isMousePress || isSpacePress.current) {
+      return;
+    }
+
+    const posX = prevPosX.current - e.clientX;
+    const posY = prevPosY.current - e.clientY;
+
+    prevPosX.current = e.clientX;
+    prevPosY.current = e.clientY;
+
+    $target.current.style.left = `${$target.current.offsetLeft - posX}px`;
+    $target.current.style.top = `${$target.current.offsetTop - posY}px`;
+  };
 
   return (
     <div
+      ref={$layout}
       css={css`
-        position: relative;
-        width: 100%;
-        display: flex;
-        flex-direction: column-reverse;
-        transform: skew(-30deg, 15deg);
-
-        &:hover > div:first-of-type {
-          border: 2px solid royalblue !important;
-        }
-
-        cursor: grab;
-        &:active {
-          cursor: grabbing;
-        }
-
-        > div:first-of-type {
-          &::before {
-            content: '';
-            opacity: 0.5;
-            display: block;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-              45deg,
-              lightgray 25%,
-              white 0,
-              white 50%,
-              lightgray 0,
-              lightgray 75%,
-              white 0
-            );
-            background-size: 20px 20px;
-          }
-        }
+        position: fixed;
+        inset: 0;
       `}
-      {...props}
+      onMouseMove={handleLayoutMouseMove}
     >
-      {planes.map(
-        ({ pos: { y, x }, size: { height, width }, depth, bgColor }, i) => {
-          return (
-            <div
-              key={[y, x, height, width, depth, bgColor, i].join('|')}
-              css={css`
-                position: absolute;
-                left: ${(window.innerWidth / 0.5 + y) * planeRatio -
-                depth * 3}px;
-                bottom: ${(-(window.innerHeight / 0.5) + x) * planeRatio +
-                depth * 3}px;
-                width: ${height * planeRatio}px;
-                height: ${width * planeRatio}px;
-                background-color: ${bgColor === DEFAULT_DOM_BG
-                  ? 'white'
-                  : bgColor};
-                transition: filter ease 0.2s;
-                border: 1px solid ${color.borderColor};
-                border-radius: 5px;
-              `}
-            />
-          );
-        }
-      )}
+      <div
+        css={css`
+          position: relative;
+        `}
+        ref={$drag}
+      >
+        <DragContext.Provider
+          value={{
+            isMousePress,
+            prevPosX,
+            prevPosY,
+            $dragElements,
+            $target,
+          }}
+        >
+          <StackingContext planeTree={planeTree} />
+        </DragContext.Provider>
+      </div>
     </div>
   );
 }
