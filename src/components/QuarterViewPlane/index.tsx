@@ -100,7 +100,6 @@ export function QuarterViewPlane() {
             isMousePress,
             prevPosX,
             prevPosY,
-            $dragElements,
             $target,
           }}
         >
