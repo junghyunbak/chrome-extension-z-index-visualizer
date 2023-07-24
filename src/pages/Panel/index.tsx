@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from 'react';
+/** @jsxImportSource @emotion/react */
+import React, { ReactNode, useEffect, useState } from 'react';
 import type { AnyAction } from '@reduxjs/toolkit';
 import type { Store } from 'webext-redux';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
+
+import { Global } from '@emotion/react';
+import * as S from './index.styles';
 
 import Panel from './Panel';
 
@@ -13,9 +17,16 @@ import { MESSAGE_TYPE, PORT_NAMES } from '@/constants';
 
 const container = document.getElementById('app-container');
 const root = createRoot(container!);
-root.render(<StoreWrapper />);
+root.render(
+  <React.StrictMode>
+    <Global styles={S.global} />
+    <StoreWrapper>
+      <Panel />
+    </StoreWrapper>
+  </React.StrictMode>
+);
 
-function StoreWrapper() {
+function StoreWrapper({ children }: { children: ReactNode }) {
   const [store, setStore] = useState<Store<State, AnyAction> | null>(null);
 
   const initProxyStore = async () => {
@@ -34,13 +45,5 @@ function StoreWrapper() {
     });
   }, []);
 
-  return (
-    <div>
-      {store && (
-        <Provider store={store}>
-          <Panel />
-        </Provider>
-      )}
-    </div>
-  );
+  return <div>{store && <Provider store={store}>{children}</Provider>}</div>;
 }

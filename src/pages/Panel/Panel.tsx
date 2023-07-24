@@ -4,13 +4,11 @@ import React, { MutableRefObject, useEffect, useRef } from 'react';
 import { useGlobalDrag } from '@/hooks/useGlobalDrag';
 import { useAppSelector } from '@/hooks/useAppDispatch';
 
-import { css, Global } from '@emotion/react';
+import { css } from '@emotion/react';
 
 import { QuarterViewPlane } from '@/components/QuarterViewPlane';
 import { Address } from '@/components/Address';
 import { Tile } from '@/components/Tile';
-
-import * as S from './Panel.styles';
 
 import { PlaneTree } from '@/types/plane';
 import { Controller } from '@/components/Controller';
@@ -149,9 +147,14 @@ function Panel() {
   };
 
   return (
-    <div ref={$layout} css={S.layout} onMouseMove={handleLayoutMouseMove}>
-      <Global styles={S.global} />
-
+    <div
+      css={css`
+        position: fixed;
+        inset: 0;
+      `}
+      ref={$layout}
+      onMouseMove={handleLayoutMouseMove}
+    >
       <Address />
 
       <Tile />
@@ -164,7 +167,14 @@ function Panel() {
         <Controller.ZoomInOut />
       </Controller>
 
-      <div ref={$drag} css={S.dragWrapper}>
+      <div
+        css={css`
+          position: relative;
+          width: 100%;
+          height: 100%;
+        `}
+        ref={$drag}
+      >
         <NestedDraggablePlaneElement planeTree={planeTree} />
       </div>
     </div>

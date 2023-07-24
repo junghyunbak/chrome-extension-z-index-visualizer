@@ -32,14 +32,3 @@ export const global = css`
     cursor: grabbing;
   }
 `;
-
-export const layout = css`
-  position: fixed;
-  inset: 0;
-`;
-
-export const dragWrapper = css`
-  position: relative;
-  width: 100%;
-  height: 100%;
-`;
