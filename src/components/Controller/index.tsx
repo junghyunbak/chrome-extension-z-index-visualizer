@@ -3,12 +3,14 @@ import React from 'react';
 import { HTMLAttributes } from 'react';
 import { css } from '@emotion/react';
 import { zIndex } from '@/assets/style';
+import { Initializer } from './Initializer';
+import { ZoomInOut } from './ZoomInOut';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   type: 'leftBottom' | 'rightBottom' | 'leftTop' | 'rightTop';
 }
 
-export function ControllerWrapper({ type, children, ...props }: Props) {
+export function Controller({ type, children, ...props }: Props) {
   const inset = (() => {
     switch (type) {
       case 'leftBottom':
@@ -39,3 +41,6 @@ export function ControllerWrapper({ type, children, ...props }: Props) {
     </div>
   );
 }
+
+Controller.Initializer = Initializer;
+Controller.ZoomInOut = ZoomInOut;

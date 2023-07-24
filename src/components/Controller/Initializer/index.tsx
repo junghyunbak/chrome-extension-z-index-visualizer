@@ -1,5 +1,4 @@
 import React, { MutableRefObject } from 'react';
-import { ControllerWrapper } from '@/components/Controller/ControllerWrapper';
 import { setElementTopLeftPosition } from '@/utils/dom';
 import { Button } from '@/components/Button';
 import { MESSAGE_TYPE } from '@/constants';
@@ -10,7 +9,7 @@ interface Props {
   $dragElements: MutableRefObject<MutableRefObject<HTMLDivElement | null>[]>;
 }
 
-export function ControllerInitializer({ $dragElements }: Props) {
+export function Initializer({ $dragElements }: Props) {
   const handleFitButtonClick = () => {
     $dragElements.current.forEach(($drag) => {
       setElementTopLeftPosition($drag.current);
@@ -40,13 +39,13 @@ export function ControllerInitializer({ $dragElements }: Props) {
   };
 
   return (
-    <ControllerWrapper type={'rightBottom'}>
+    <>
       <Button onClick={handleFitButtonClick}>
         <Fit />
       </Button>
       <Button onClick={handleRefreshButtonClick}>
         <Refresh />
       </Button>
-    </ControllerWrapper>
+    </>
   );
 }

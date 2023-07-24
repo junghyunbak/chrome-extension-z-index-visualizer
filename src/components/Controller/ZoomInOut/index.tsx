@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { ControllerWrapper } from '@/components/Controller/ControllerWrapper';
 import { Button } from '@/components/Button';
 import { useDispatch } from 'react-redux';
 import { decreasePlaneRatio, increasePlaneRatio } from '@/store/slices/size';
@@ -7,7 +6,7 @@ import { decreasePlaneRatio, increasePlaneRatio } from '@/store/slices/size';
 import Minus from '@/assets/svg/minus.svg';
 import Plus from '@/assets/svg/plus.svg';
 
-export function ControllerZoomInOut() {
+export function ZoomInOut() {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,7 +26,7 @@ export function ControllerZoomInOut() {
   }, []);
 
   return (
-    <ControllerWrapper type={'leftBottom'}>
+    <>
       <Button
         onClick={() => {
           dispatch(decreasePlaneRatio());
@@ -42,6 +41,6 @@ export function ControllerZoomInOut() {
       >
         <Plus />
       </Button>
-    </ControllerWrapper>
+    </>
   );
 }

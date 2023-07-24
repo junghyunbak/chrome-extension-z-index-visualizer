@@ -8,13 +8,12 @@ import { css, Global } from '@emotion/react';
 
 import { QuarterViewPlane } from '@/components/QuarterViewPlane';
 import { Address } from '@/components/Address';
-import { ControllerZoomInOut } from '@/components/Controller/ControllerZoomInOut';
-import { ControllerInitializer } from '@/components/Controller/ControllerInitializer';
 import { Tile } from '@/components/Tile';
 
 import * as S from './Panel.styles';
 
 import { PlaneTree } from '@/types/plane';
+import { Controller } from '@/components/Controller';
 
 function Panel() {
   const $layout = useRef<HTMLDivElement | null>(null);
@@ -152,10 +151,19 @@ function Panel() {
   return (
     <div ref={$layout} css={S.layout} onMouseMove={handleLayoutMouseMove}>
       <Global styles={S.global} />
+
       <Address />
+
       <Tile />
-      <ControllerInitializer $dragElements={$dragElements} />
-      <ControllerZoomInOut />
+
+      <Controller type={'rightBottom'}>
+        <Controller.Initializer $dragElements={$dragElements} />
+      </Controller>
+
+      <Controller type={'leftBottom'}>
+        <Controller.ZoomInOut />
+      </Controller>
+
       <div ref={$drag} css={S.dragWrapper}>
         <NestedDraggablePlaneElement planeTree={planeTree} />
       </div>
